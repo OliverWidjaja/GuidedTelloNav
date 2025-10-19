@@ -1,45 +1,135 @@
-import socket, json, time
+import time
+import math
+from natnet_client import DataDescriptions, DataFrame, NatNetClient
+from tello import TelloController
+from controllers import PController
 
+HEIGHT_WAYPOINTS = [1.0, 0.5, 1.0]  # meters
+WAYPOINT_TOLERANCE = 0.05  # meters
+KP = 80.0
 
-UDP_IP = "127.0.0.1"
-UDP_PORT = 5059
+rigid_body_id_to_name = {}
+current_rigid_bodies = {}
+num_frames = 0
 
-# Store data for all rigid bodies
-rigid_bodies = {}
-frame_count = 0
-timestamp = 0
+height_p = PController(kp=KP, max_output=60)
+tello = TelloController()
 
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind((UDP_IP, UDP_PORT))
-sock.setblocking(False)  # Non-blocking
+def quaternion_to_euler(x, y, z, w):
+    yaw = math.atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
+    pitch = math.asin(2 * (w * y - z * x))
+    roll = math.atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y))
+    return yaw, pitch, roll
 
-def update_rigid_bodies():
-    global rigid_bodies, frame_count, timestamp
-    try:
-        data, _ = sock.recvfrom(4096)  # Increased buffer size for larger JSON
-        msg = json.loads(data.decode())
-        
-        # Extract the nested rigid bodies data
-        rigid_bodies = msg.get("rigid_bodies", {})
-        frame_count = msg.get("frame_count", 0)
-        timestamp = msg.get("timestamp", 0)
-        
-    except BlockingIOError:
-        pass  # No new data 
-    except json.JSONDecodeError as e:
-        print(f"JSON decode error: {e}")
-    except Exception as e:
-        print(f"Error receiving data: {e}")
+def receive_new_desc(desc: DataDescriptions):
+    print("Received data descriptions.")
+    for rigid_body in desc.rigid_bodies:
+        rigid_body_id_to_name[rigid_body.id_num] = rigid_body.name
 
-while True:
-    update_rigid_bodies()
+def receive_new_frame(data_frame: DataFrame):
+    global num_frames, current_rigid_bodies
+    num_frames += 1
     
-    # Print all rigid bodies
-    print(f"Frame: {frame_count}, Timestamp: {timestamp:.3f}")
-    for name, data in rigid_bodies.items():
-        pos = data.get("position", [0, 0, 0])
-        euler = data.get("orientation", {}).get("euler", [0, 0, 0])
-        print(f"  {name}: Pos{pos}, Euler{euler}")
+    for rigid_body in getattr(data_frame, "rigid_bodies", []):
+        name = rigid_body_id_to_name.get(rigid_body.id_num, f"RigidBody_{rigid_body.id_num}")
+        pos = rigid_body.pos
+        rot = rigid_body.rot  # 4D Quaternion
+
+        yaw, pitch, roll = quaternion_to_euler(rot[0], rot[1], rot[2], rot[3])
+        
+        current_rigid_bodies[name] = {
+            "position": [float(f"{p:.4f}") for p in pos],
+            "orientation": {
+                "quaternion": [float(f"{r:.4f}") for r in rot],
+                "euler": [float(f"{yaw:.4f}"), float(f"{pitch:.4f}"), float(f"{roll:.4f}")]
+            },
+            "id": rigid_body.id_num
+        }
+
+def get_tello_position():
+    """Get Tello position directly from Motive data"""
+    tello_data = current_rigid_bodies.get("Tello")
+    if tello_data and "position" in tello_data:
+        return tello_data["position"]  # [x, y, z]
+    return None
+
+def run_mission(streaming_client):
+    if not tello.connect():
+        print("Failed to connect to Tello")
+        return
     
-    print("-" * 50)
-    time.sleep(0.1)
+    if not tello.takeoff():
+        print("Takeoff failed")
+        return
+    
+    print(f"Mission started: {HEIGHT_WAYPOINTS}")
+    
+    for i, target_height in enumerate(HEIGHT_WAYPOINTS):
+        print(f"Waypoint {i+1}/{len(HEIGHT_WAYPOINTS)}: {target_height}m")
+        
+        waypoint_start = time.time()
+        frames_without_data = 0
+        
+        while time.time() - waypoint_start < 30:  # 30s timeout per waypoint
+            streaming_client.update_sync()
+            
+            position = get_tello_position()
+            
+            # Error Fail-safe
+            if position is None:
+                frames_without_data += 1
+                if frames_without_data > 10 and frames_without_data < 30:
+                    print("⚠️  No Motive data! Waiting...")
+                    frames_without_data = 0
+                elif frames_without_data >= 30:
+                    print("❌ Lost Motive data. Landing.")
+                    tello.land()
+                    tello.disconnect()
+                    return
+                time.sleep(0.01)
+                continue
+            
+            frames_without_data = 0
+            current_height = position[2]
+            
+            control_output = height_p.compute(target_height, current_height)
+            tello.send_rc_control(0, 0, int(control_output), 0)
+            
+            print(f"Position: [{position[0]:.3f}, {position[1]:.3f}, {position[2]:.3f}]m | Target: {target_height}m | Error: {target_height - current_height:.3f}m | Frames: {num_frames}")
+            
+            if abs(target_height - current_height) <= WAYPOINT_TOLERANCE:
+                print(f"Reached waypoint {i+1}")
+                time.sleep(1)  # Stabilize
+                break
+            
+            time.sleep(0.01)  # Control loop rate
+    
+    tello.land()
+    tello.disconnect()
+    print("Mission complete")
+
+if __name__ == "__main__":
+    streaming_client = NatNetClient(server_ip_address="127.0.0.1", local_ip_address="127.0.0.1", use_multicast=False)
+    streaming_client.on_data_description_received_event.handlers.append(receive_new_desc)
+    streaming_client.on_data_frame_received_event.handlers.append(receive_new_frame)
+    
+    with streaming_client:
+        streaming_client.request_modeldef()
+        
+        # Wait for initial data
+        print("Waiting for Motive data...")
+        initial_frames = num_frames
+        timeout = time.time() + 5  # 5s timeout
+        
+        while time.time() < timeout:
+            streaming_client.update_sync()
+            if num_frames > initial_frames + 5:  # Wait for at least 5 frames
+                print(f"Motive data streaming! Received {num_frames} frames")
+                break
+            time.sleep(0.1)
+        else:
+            print("❌ Motive Timeout. Exiting.")
+            exit(1)
+        
+        # Run the mission
+        run_mission(streaming_client)
