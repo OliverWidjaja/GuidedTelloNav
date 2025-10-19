@@ -6,13 +6,13 @@ from controllers import PController
 
 HEIGHT_WAYPOINTS = [1.0, 0.5, 1.0]  # meters
 WAYPOINT_TOLERANCE = 0.05  # meters
-KP = 80.0
+KP = 100.0
 
 rigid_body_id_to_name = {}
 current_rigid_bodies = {}
 num_frames = 0
 
-height_p = PController(kp=KP, max_output=60)
+altitude_control = PController(kp=KP)
 tello = TelloController()
 
 def quaternion_to_euler(x, y, z, w):
@@ -21,12 +21,12 @@ def quaternion_to_euler(x, y, z, w):
     roll = math.atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y))
     return yaw, pitch, roll
 
-def receive_new_desc(desc: DataDescriptions):
+def receive_desc(desc: DataDescriptions):
     print("Received data descriptions.")
     for rigid_body in desc.rigid_bodies:
         rigid_body_id_to_name[rigid_body.id_num] = rigid_body.name
 
-def receive_new_frame(data_frame: DataFrame):
+def receive_frame(data_frame: DataFrame):
     global num_frames, current_rigid_bodies
     num_frames += 1
     
@@ -46,7 +46,7 @@ def receive_new_frame(data_frame: DataFrame):
             "id": rigid_body.id_num
         }
 
-def get_tello_position():
+def get_pos():
     """Get Tello position directly from Motive data"""
     tello_data = current_rigid_bodies.get("Tello")
     if tello_data and "position" in tello_data:
@@ -73,7 +73,7 @@ def run_mission(streaming_client):
         while time.time() - waypoint_start < 30:  # 30s timeout per waypoint
             streaming_client.update_sync()
             
-            position = get_tello_position()
+            position = get_pos()
             
             # Error Fail-safe
             if position is None:
@@ -90,14 +90,14 @@ def run_mission(streaming_client):
                 continue
             
             frames_without_data = 0
-            current_height = position[2]
+            present_height = position[2]
             
-            control_output = height_p.compute(target_height, current_height)
+            control_output = altitude_control.compute(target_height, present_height)
             tello.send_rc_control(0, 0, int(control_output), 0)
             
-            print(f"Position: [{position[0]:.3f}, {position[1]:.3f}, {position[2]:.3f}]m | Target: {target_height}m | Error: {target_height - current_height:.3f}m | Frames: {num_frames}")
+            print(f"Position: [{position[0]:.3f}, {position[1]:.3f}, {position[2]:.3f}]m | Target: {target_height}m | Error: {target_height - present_height:.3f}m | Frames: {num_frames}")
             
-            if abs(target_height - current_height) <= WAYPOINT_TOLERANCE:
+            if abs(target_height - present_height) <= WAYPOINT_TOLERANCE:
                 print(f"Reached waypoint {i+1}")
                 time.sleep(1)  # Stabilize
                 break
@@ -110,20 +110,19 @@ def run_mission(streaming_client):
 
 if __name__ == "__main__":
     streaming_client = NatNetClient(server_ip_address="127.0.0.1", local_ip_address="127.0.0.1", use_multicast=False)
-    streaming_client.on_data_description_received_event.handlers.append(receive_new_desc)
-    streaming_client.on_data_frame_received_event.handlers.append(receive_new_frame)
+    streaming_client.on_data_description_received_event.handlers.append(receive_desc)
+    streaming_client.on_data_frame_received_event.handlers.append(receive_frame)
     
     with streaming_client:
         streaming_client.request_modeldef()
         
-        # Wait for initial data
         print("Waiting for Motive data...")
         initial_frames = num_frames
         timeout = time.time() + 5  # 5s timeout
         
         while time.time() < timeout:
             streaming_client.update_sync()
-            if num_frames > initial_frames + 5:  # Wait for at least 5 frames
+            if num_frames > initial_frames + 5:  # Wait at least 5 frames
                 print(f"Motive data streaming! Received {num_frames} frames")
                 break
             time.sleep(0.1)
