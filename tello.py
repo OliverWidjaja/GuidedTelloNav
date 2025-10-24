@@ -14,8 +14,11 @@ class TelloController:
         self.is_connected = False
         self.debug = debug
         
+        log_level: int = logging.WARN
+        Tello.LOGGER.setLevel(log_level)
+        
         # Setup logging
-        logging.basicConfig(level=logging.DEBUG if debug else logging.WARNING) # or INFO
+        logging.basicConfig(level=logging.DEBUG if debug else logging.CRITICAL) # or INFO/ WARNING/ CRITICAL
         self.logger = logging.getLogger(__name__)
         
         # State variables

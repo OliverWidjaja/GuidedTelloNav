@@ -8,7 +8,7 @@ HEIGHT_WAYPOINTS = [1.0, 0.5, 1.0]  # meters
 WAYPOINT_TOLERANCE = 0.07  # meters
 KP = 140.0
 
-id_name = {}  # mapping from ID to name
+id_name = {}  # mapping from ID to name-
 rigid_bodies = {}
 num_frames = 0
 
@@ -49,7 +49,8 @@ def receive_frame(data_frame: DataFrame):
 
 def get_tello():
     tello_data = rigid_bodies.get("Tello")
-    if tello_data and "position" in tello_data:  # 2FA check in-case Tello RB disappeared
+    if tello_data and "position" in tello_data:
+        tello_data["position"][1] = -tello_data["position"][1]  # Invert Y-axis
         return tello_data["position"]  # [x, y, z]
     return None
 
@@ -70,28 +71,16 @@ def run_mission(streaming_client: NatNetClient):
             print(f"Waypoint {i+1}/{len(HEIGHT_WAYPOINTS)}: {target_height}m")
             
             waypoint_start = time.time()
-            frames_without_data = 0
 
             while time.time() - waypoint_start < 20:  # 20s timeout per waypoint
                 streaming_client.update_sync()
                 
                 position = get_tello()
-                
-                # Error Fail-safe
                 if position is None:
-                    frames_without_data += 1
-                    if frames_without_data > 0 and frames_without_data < 20:
-                        print("⚠️  No Motive data! Waiting...")
-                        frames_without_data = 0
-                    elif frames_without_data >= 20:
-                        print("❌ Lost Motive data. Landing.")
-                        tello.land()
-                        tello.disconnect()
-                        return
+                    print("Data skipped: No Tello position")
                     time.sleep(0.01)
                     continue
                 
-                frames_without_data = 0
                 present_height = position[2]
                 
                 control_output = altitude_control.compute(target_height, present_height)
@@ -111,22 +100,21 @@ def run_mission(streaming_client: NatNetClient):
         print("Mission complete")
 
     except KeyboardInterrupt:
-        print("\n⚠️  Mission interrupted by user")
+        print("\nMission interrupted by user")
     except Exception as e:
         print(f"\n❌ Error during mission: {e}")
     finally:
-        # This always runs, even on Ctrl+C or errors
-        print("🛬 Ensuring drone lands safely...")
+        print("Landing drone...") # Always runs, even on Ctrl+C or errors
         try:
             tello.land()
             tello.disconnect()
         except:
-            pass  # Ignore errors during cleanup
+            pass  # Ignoring errors during cleanup
 
 if __name__ == "__main__":
     streaming_client = NatNetClient(server_ip_address="127.0.0.1", local_ip_address="127.0.0.1", use_multicast=False)
     streaming_client.on_data_description_received_event.handlers.append(receive_desc) # Handlers
-    streaming_client.on_data_frame_received_event.handlers.append(receive_frame)
+    streaming_client.on_data_frame_received_event.handlers.append(receive_frame) # Handlers
     
     with streaming_client:
         streaming_client.request_modeldef()
@@ -137,7 +125,6 @@ if __name__ == "__main__":
         while time.time() < timeout:
             streaming_client.update_sync()
 
-            # Check if we found Tello in data descriptions AND have frame data
             if "Tello" in rigid_bodies:
                 print("✓ Tello tracking! Starting mission.")
                 break
@@ -148,4 +135,3 @@ if __name__ == "__main__":
                 print("   - Available rigid bodies:", list(id_name.values()))
             exit(1)
         
-        run_mission(streaming_client)
