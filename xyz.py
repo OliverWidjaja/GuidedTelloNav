@@ -5,18 +5,25 @@ from tello import TelloController
 from controllers import PController
 
 # Waypoints format: [x, y, z, yaw] in meters and radians
+# WAYPOINTS = [
+#     [0.0, 0.0, 0.75, 0.0],
+#     [0.0, 0.0, 0.5, 0],
+#     [0.25, 0.0, 0.5, 0]
+# ]
+
 WAYPOINTS = [
-    [0.0, 0.0, 0.75, 0.0],
-    [0.0, 0.0, 0.5, 0],
-    [0.25, 0.0, 0.5, 0]
+    [0.0, 0.0, 0.5, 0.0],
+    [0, 0.0, 1.5, 0],
+    [-0.25, 0.0, 1.5, 0],
+    [-1.0, 0.0, 1.5, 0]
 ]
 
 WAYPOINT_TOLERANCE = 0.1  # meters for position
 YAW_TOLERANCE = 0.12      # radians for yaw
 
 # PID gains for each axis
-KP_X = 80.0
-KP_Y = 80.0  
+KP_X = 140.0
+KP_Y = 140.0  
 KP_Z = 140.0
 KP_YAW = 60.0
 
@@ -24,7 +31,11 @@ id_name = {}  # mapping from ID to name
 rigid_bodies = {}
 num_frames = 0
 
-# Create controllers for each degree of freedom
+# Velocity tracking variables
+prev_position = None
+prev_time = None
+velocity = [0.0, 0.0, 0.0]  # [vx, vy, vz] in m/s
+
 x_control = PController(kp=KP_X)
 y_control = PController(kp=KP_Y)
 z_control = PController(kp=KP_Z)
@@ -64,6 +75,30 @@ def normalize_angle(angle):
         angle += 2 * math.pi
     return angle
 
+def calculate_velocity(current_position, current_time):
+    """Calculate velocity based on position change and time delta"""
+    global prev_position, prev_time, velocity
+    
+    # First measurement
+    if prev_position is None or prev_time is None:
+        prev_position = current_position.copy()
+        prev_time = current_time
+        return [0.0, 0.0, 0.0]
+    
+    dt = current_time - prev_time
+    if dt <= 0:
+        return velocity
+    
+    vx = (current_position[0] - prev_position[0]) / dt
+    vy = (current_position[1] - prev_position[1]) / dt
+    vz = (current_position[2] - prev_position[2]) / dt
+    
+    prev_position = current_position.copy()
+    prev_time = current_time
+    
+    velocity = [vx, vy, vz]
+    return velocity
+
 def receive_desc(desc: DataDescriptions):
     print("Received data descriptions.")
     for rigid_body in desc.rigid_bodies:
@@ -96,8 +131,12 @@ def get_tello_pose():
         position = tello_data["position"]  # [x, y, z]
         position[1] = -position[1]  # Invert Y-axis
         yaw = tello_data["orientation"]["euler"][0]  # yaw angle in radians
-        return position, yaw
-    return None, None
+
+        current_time = time.time()
+        current_velocity = calculate_velocity(position, current_time)
+
+        return position, yaw, current_velocity
+    return None, None, None
 
 def run_mission(streaming_client: NatNetClient):
     try:
@@ -107,9 +146,11 @@ def run_mission(streaming_client: NatNetClient):
         
         battery = tello.get_battery()
         print(f"Tello battery: {battery}%")
-        if battery is not None and battery > 20:
+        if battery is not None and battery > 30:
             tello.takeoff()
-            # time.sleep(3)  # Allow time for takeoff to complete
+        else:
+            print("low bat")
+            exit(0)
         
         print(f"Mission started with {len(WAYPOINTS)} waypoints")
         
@@ -119,31 +160,16 @@ def run_mission(streaming_client: NatNetClient):
                   f"X={target_x:.2f}m, Y={target_y:.2f}m, Z={target_z:.2f}m, Yaw={math.degrees(target_yaw):.1f}°")
             
             waypoint_start = time.time()
-            frames_without_data = 0
             waypoint_reached = False
 
-            while time.time() - waypoint_start < 30:  # 30s timeout per waypoint
+            while time.time() - waypoint_start < 5:  # 5s timeout per waypoint
                 streaming_client.update_sync()
-                
-                position, current_yaw = get_tello_pose()
-                
-                # Error Fail-safe
-                if position is None or current_yaw is None:
-                    frames_without_data += 1
-                    if frames_without_data > 0 and frames_without_data < 20:
-                        print("⚠️  No Motive data! Waiting...")
-                        frames_without_data = 0
-                    elif frames_without_data >= 20:
-                        print("❌ Lost Motive data. Landing.")
-                        tello.land()
-                        tello.disconnect()
-                        return
+
+                position, current_yaw, current_velocity = get_tello_pose()
+                if position is None or current_yaw is None or current_velocity is None:
                     time.sleep(0.01)
                     continue
-                
-                frames_without_data = 0
-                
-                # Calculate errors
+                                
                 error_x = target_x - position[0]
                 error_y = target_y - position[1]  
                 error_z = target_z - position[2]
@@ -151,17 +177,15 @@ def run_mission(streaming_client: NatNetClient):
                 # Normalize yaw error to shortest path
                 error_yaw = normalize_angle(target_yaw - current_yaw)
                 
-                # Compute control outputs
-                control_x = x_control.compute(target_x, position[0])
-                control_y = y_control.compute(target_y, position[1])
-                control_z = z_control.compute(target_z, position[2])
-                control_yaw = yaw_control.compute(target_yaw, current_yaw)
+                control_x = x_control.compute(target_x, position[0], current_velocity[0])
+                control_y = y_control.compute(target_y, position[1], current_velocity[1])
+                control_z = z_control.compute(target_z, position[2], current_velocity[2])
+                
+                control_yaw = yaw_control.compute(target_yaw, current_yaw, 0)
                 control_yaw = -control_yaw  # Invert yaw control for Tello
                 
-                # Send RC controls (left_right, forward_back, up_down, yaw)
                 tello.send_rc_control(int(control_y), int(control_x), int(control_z), int(control_yaw))
                 
-                # Check if waypoint is reached (position and yaw within tolerance)
                 position_error = math.sqrt(error_x**2 + error_y**2 + error_z**2)
                 if position_error <= WAYPOINT_TOLERANCE and abs(error_yaw) <= YAW_TOLERANCE:
                     print(f"✓ Reached waypoint {i+1}")
@@ -169,9 +193,9 @@ def run_mission(streaming_client: NatNetClient):
                     time.sleep(2)  # Stabilize at waypoint
                     break
 
-                if num_frames % 100:
-                    print(f"cur x,y,z,yaw: {position[0]:.2f}, {position[1]:.2f}, {position[2]:.2f}, {math.degrees(current_yaw):.1f}° | "
-                            f"err x,y,z,yaw: {error_x:.2f}, {error_y:.2f}, {error_z:.2f}, {math.degrees(error_yaw):.1f}° | abs error: {position_error:.2f}")
+                if num_frames % 500:
+                    print(f"pose: {position[0]:.2f}, {position[1]:.2f}, {position[2]:.2f}, {math.degrees(current_yaw):.1f}° | "
+                            f"error: {error_x:.2f}, {error_y:.2f}, {error_z:.2f}, {math.degrees(error_yaw):.1f}° | len: {position_error:.2f}")
                     print("RC Command:", control_x, control_y, control_z, control_yaw)
                 
                 time.sleep(0.01)  # Control loop rate (~100Hz)
@@ -179,7 +203,6 @@ def run_mission(streaming_client: NatNetClient):
             if not waypoint_reached:
                 print(f"⚠️  Timeout on waypoint {i+1}, proceeding to next waypoint")
         
-        # Mission complete
         print("Mission complete! Landing...")
         tello.land()
         tello.disconnect()
@@ -205,21 +228,17 @@ if __name__ == "__main__":
     with streaming_client:
         streaming_client.request_modeldef()
         
-        # print("Waiting for Motive data...")
-        # timeout = time.time() + 2  # 2s timeout
-        
-        # while time.time() < timeout:
-        #     streaming_client.update_sync()
-
-        #     # Check if we found Tello in data descriptions AND have frame data
-        #     if "Tello" in rigid_bodies:
-        #         print("✓ Tello tracking! Starting mission.")
-        #         break
-        #     time.sleep(0.1)
-        # else:
-        #     if not "Tello" in id_name.values():
-        #         print("   - Tello rigid body not defined in Motive")
-        #         print("   - Available rigid bodies:", list(id_name.values()))
-        #     exit(1)
-        
         run_mission(streaming_client)
+
+        # while True:
+        #     """ Debug mode """
+        #     streaming_client.update_sync()
+        #     position, yaw, velocity = get_tello_pose()
+        #     if position and yaw is not None and velocity is not None:
+        #         print(f"Pos: [{position[0]:.2f}, {position[1]:.2f}, {position[2]:.2f}]m | "
+        #           f"Vel: [{velocity[0]:.2f}, {velocity[1]:.2f}, {velocity[2]:.2f}] m/s | "
+        #           f"Yaw: {math.degrees(yaw):.1f}° | "
+        #           f"Frames: {num_frames}")
+        #     time.sleep(0.01)
+
+    
