@@ -1,31 +1,20 @@
-import time
-import math
 from natnet_client import DataDescriptions, DataFrame, NatNetClient
 from tello import TelloController
 from controllers import PController
+from scipy.interpolate import PchipInterpolator
+import numpy as np
+import math, time
 
 # Waypoints format: [x, y, z, yaw] in meters and radians
-# WAYPOINTS = [
-#     [0.0, 0.0, 0.75, 0.0],
-#     [0.0, 0.0, 0.5, 0],
-#     [0.25, 0.0, 0.5, 0]
-# ]
-
 WAYPOINTS = [
-    [0.0, 0.0, 0.5, 0.0],
-    [0, 0.0, 1.5, 0],
-    [-0.25, 0.0, 1.5, 0],
-    [-1.0, 0.0, 1.5, 0]
+    [0.0, 0.0, 0.75, 0.0],
+    [0, 0.0, 0.5, 0],
+    [0.25, 0.0, 0.75, 0],
 ]
 
 WAYPOINT_TOLERANCE = 0.1  # meters for position
 YAW_TOLERANCE = 0.12      # radians for yaw
-
-# PID gains for each axis
-KP_X = 140.0
-KP_Y = 140.0  
-KP_Z = 140.0
-KP_YAW = 60.0
+KP = [150, 150, 150, 60]  # [Kp_x, Kp_y, Kp_z, Kp_yaw]
 
 id_name = {}  # mapping from ID to name
 rigid_bodies = {}
@@ -36,12 +25,37 @@ prev_position = None
 prev_time = None
 velocity = [0.0, 0.0, 0.0]  # [vx, vy, vz] in m/s
 
-x_control = PController(kp=KP_X)
-y_control = PController(kp=KP_Y)
-z_control = PController(kp=KP_Z)
-yaw_control = PController(kp=KP_YAW)
+x_control = PController(kp=KP[0])
+y_control = PController(kp=KP[1])
+z_control = PController(kp=KP[2])
+yaw_control = PController(kp=KP[3])
+
+steps_traj = 50
 
 tello = TelloController()
+
+def interpolate_traj(waypoints, num_points=steps_traj):
+    """Generate interpolated trajectory using PCHIP"""
+    waypoints = np.array(waypoints)
+    x = waypoints[:, 0]
+    y = waypoints[:, 1]
+    z = waypoints[:, 2]
+    yaw = waypoints[:, 3]
+
+    pchip_x = PchipInterpolator(np.arange(len(x)), x)
+    pchip_y = PchipInterpolator(np.arange(len(y)), y)
+    pchip_z = PchipInterpolator(np.arange(len(z)), z)
+    pchip_yaw = PchipInterpolator(np.arange(len(yaw)), yaw)
+
+    t_new = np.linspace(0, len(x)-1, num_points)
+
+    x_new = pchip_x(t_new)
+    y_new = pchip_y(t_new)
+    z_new = pchip_z(t_new)
+    yaw_new = pchip_yaw(t_new)
+
+    trajectory = np.array([x_new, y_new, z_new, yaw_new]).T
+    return trajectory
 
 def quaternion_to_euler(x, y, z, w):
     """
@@ -78,15 +92,15 @@ def normalize_angle(angle):
 def calculate_velocity(current_position, current_time):
     """Calculate velocity based on position change and time delta"""
     global prev_position, prev_time, velocity
-    
-    # First measurement
+
+    # first run
     if prev_position is None or prev_time is None:
         prev_position = current_position.copy()
         prev_time = current_time
         return [0.0, 0.0, 0.0]
     
     dt = current_time - prev_time
-    if dt <= 0:
+    if dt <= 1e-6:
         return velocity
     
     vx = (current_position[0] - prev_position[0]) / dt
@@ -139,6 +153,8 @@ def get_tello_pose():
     return None, None, None
 
 def run_mission(streaming_client: NatNetClient):
+    traj = interpolate_traj(waypoints=WAYPOINTS, num_points=steps_traj)
+    
     try:
         if not tello.connect():
             print("Failed to connect to Tello")
@@ -152,17 +168,17 @@ def run_mission(streaming_client: NatNetClient):
             print("low bat")
             exit(0)
         
-        print(f"Mission started with {len(WAYPOINTS)} waypoints")
+        print(f"Mission started with {len(traj)} waypoints")
         
-        for i, waypoint in enumerate(WAYPOINTS):
+        for i, waypoint in enumerate(traj):
             target_x, target_y, target_z, target_yaw = waypoint
-            print(f"Waypoint {i+1}/{len(WAYPOINTS)}: "
+            print(f"Waypoint {i+1}/{len(traj)}: "
                   f"X={target_x:.2f}m, Y={target_y:.2f}m, Z={target_z:.2f}m, Yaw={math.degrees(target_yaw):.1f}°")
             
             waypoint_start = time.time()
             waypoint_reached = False
 
-            while time.time() - waypoint_start < 5:  # 5s timeout per waypoint
+            while time.time() - waypoint_start < 1.5:  # 1.5s timeout per waypoint
                 streaming_client.update_sync()
 
                 position, current_yaw, current_velocity = get_tello_pose()
@@ -188,15 +204,13 @@ def run_mission(streaming_client: NatNetClient):
                 
                 position_error = math.sqrt(error_x**2 + error_y**2 + error_z**2)
                 if position_error <= WAYPOINT_TOLERANCE and abs(error_yaw) <= YAW_TOLERANCE:
-                    print(f"✓ Reached waypoint {i+1}")
                     waypoint_reached = True
-                    time.sleep(2)  # Stabilize at waypoint
                     break
 
-                if num_frames % 500:
-                    print(f"pose: {position[0]:.2f}, {position[1]:.2f}, {position[2]:.2f}, {math.degrees(current_yaw):.1f}° | "
-                            f"error: {error_x:.2f}, {error_y:.2f}, {error_z:.2f}, {math.degrees(error_yaw):.1f}° | len: {position_error:.2f}")
-                    print("RC Command:", control_x, control_y, control_z, control_yaw)
+                # if num_frames % 500:
+                #     print(f"pose: {position[0]:.2f}, {position[1]:.2f}, {position[2]:.2f}, {math.degrees(current_yaw):.1f}° | "
+                #             f"error: {error_x:.2f}, {error_y:.2f}, {error_z:.2f}, {math.degrees(error_yaw):.1f}° | len: {position_error:.2f}")
+                #     print("RC Command:", control_x, control_y, control_z, control_yaw)
                 
                 time.sleep(0.01)  # Control loop rate (~100Hz)
             
