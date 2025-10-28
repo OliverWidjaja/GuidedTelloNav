@@ -100,28 +100,31 @@ async def as_takeoff(tello_controller, vesc_motor):
     """    
     takeoff_complete = False
     
-    async def vesc_control_loop(dt=0.05):
+    async def vesc_when_takeoff(dt=0.05):
         """VESC control loop that runs during takeoff"""
-        while not takeoff_complete:            
-            await vesc_motor.set_current(0.90)
-
+        while not takeoff_complete:
+            # manual timing correction
+            time.sleep(0.25) # (blocking)
+            await vesc_motor.set_current(0.70)
             await asyncio.sleep(dt)
     
     async def takeoff_sequence():
         """Run the blocking takeoff command in a thread"""
         nonlocal takeoff_complete
         try:
-            # This is the blocking takeoff command
+            # blocking command
             tello_controller.takeoff()
+
+            # stabilize period
             time.sleep(5.0)
             takeoff_complete = True
             print("Tello takeoff command completed")
         except Exception as e:
             print(f"Error during takeoff: {e}")
-            takeoff_complete = True
+            exit(1)
     
     # Start both tasks concurrently
-    vesc_task = asyncio.create_task(vesc_control_loop())
+    vesc_task = asyncio.create_task(vesc_when_takeoff())
     takeoff_task = asyncio.create_task(takeoff_sequence())
     
     await takeoff_task
@@ -265,7 +268,7 @@ async def run_mission_async(streaming_client: NatNetClient, vesc_motor: Bluetoot
         
         battery = tello.get_battery()
         print(f"Tello battery: {battery}%")
-        if battery is not None and battery > 25:
+        if battery is not None and battery > 30:
             # Run asynchronous takeoff with VESC control
             await as_takeoff(tello, vesc_motor)
         else:
