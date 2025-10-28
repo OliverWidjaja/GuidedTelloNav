@@ -100,13 +100,19 @@ async def as_takeoff(tello_controller, vesc_motor):
     """    
     takeoff_complete = False
     
-    async def vesc_when_takeoff(dt=0.05):
-        """VESC control loop that runs during takeoff"""
-        while not takeoff_complete:
-            # manual timing correction
-            time.sleep(0.25) # (blocking)
-            await vesc_motor.set_current(0.70)
-            await asyncio.sleep(dt)
+    async def amphere_vesc(dt=0.05):
+        """single command"""
+        time.sleep(0.25) # (blocking)
+        await vesc_motor.set_current(0.70)
+        print("dsfsd")
+
+        # """looped command"""
+        # while not takeoff_complete:
+        #     # manual timing correction
+        #     time.sleep(0.25) # (blocking)
+        #     print("hidd")
+        #     await vesc_motor.set_current(0.70)
+        #     await asyncio.sleep(dt)
     
     async def takeoff_sequence():
         """Run the blocking takeoff command in a thread"""
@@ -114,6 +120,7 @@ async def as_takeoff(tello_controller, vesc_motor):
         try:
             # blocking command
             tello_controller.takeoff()
+            print("takeoff")
 
             # stabilize period
             time.sleep(5.0)
@@ -124,7 +131,7 @@ async def as_takeoff(tello_controller, vesc_motor):
             exit(1)
     
     # Start both tasks concurrently
-    vesc_task = asyncio.create_task(vesc_when_takeoff())
+    vesc_task = asyncio.create_task(amphere_vesc())
     takeoff_task = asyncio.create_task(takeoff_sequence())
     
     await takeoff_task
