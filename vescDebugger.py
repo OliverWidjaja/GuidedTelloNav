@@ -60,7 +60,7 @@ class BluetoothVESC:
 
 async def run_traj(motor: BluetoothVESC):
     print("Executing trajectory...")
-    await motor.set_current(0.45)
+    await motor.set_current(-0.2, can_id=0x77)
 
 async def main(address):
     async with BleakClient(address) as client:
