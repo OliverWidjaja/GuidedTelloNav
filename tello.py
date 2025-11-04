@@ -14,11 +14,9 @@ class TelloController:
         self.is_connected = False
         self.debug = debug
         
-        log_level: int = logging.WARN # del to debug
-        Tello.LOGGER.setLevel(log_level) # del to debug
         
         # Setup logging
-        logging.basicConfig(level=logging.DEBUG if debug else logging.CRITICAL) # or INFO/ WARNING/ CRITICAL
+        logging.basicConfig(level=logging.WARN if debug else logging.CRITICAL) # or INFO/ WARNING/ CRITICAL
         self.logger = logging.getLogger(__name__)
         
         # State variables
@@ -27,20 +25,16 @@ class TelloController:
         
     def connect(self):
         """Connect to Tello drone"""
-        try:
-            self.tello.connect()
-            self.is_connected = True
-            self.battery_level = self.tello.get_battery()
-            self.logger.info(f"Connected to Tello! Battery: {self.battery_level}%")
-            return True
-        except Exception as e:
-            self.logger.error(f"Failed to connect: {e}")
-            return False
+        self.tello.connect()
+        self.is_connected = True
+        self.battery_level = self.tello.get_battery()
+        self.logger.info(f"Connected to Tello! Battery: {self.battery_level}%")
+
     
     def disconnect(self):
         """Disconnect from Tello drone"""
+        self.tello.end()
         if self.is_connected:
-            self.tello.end()
             self.is_connected = False
             self.logger.info("Disconnected from Tello")
     
@@ -51,9 +45,9 @@ class TelloController:
             return False
         
         try:
-            self.tello.takeoff()
+            ret = self.tello.takeoff()
             self.logger.info("Takeoff command sent")
-            return True
+            return ret
         except Exception as e:
             self.logger.error(f"Takeoff failed: {e}")
             return False
