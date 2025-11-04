@@ -3,7 +3,7 @@ import time
 import logging
 
 class TelloController:
-    def __init__(self, debug=False):
+    def __init__(self, debug=True):
         """
         Initialize Tello drone controller
         
@@ -14,10 +14,8 @@ class TelloController:
         self.is_connected = False
         self.debug = debug
         
-        
-        # Setup logging
-        logging.basicConfig(level=logging.WARN if debug else logging.CRITICAL) # or INFO/ WARNING/ CRITICAL
-        self.logger = logging.getLogger(__name__)
+        logging.basicConfig(level=logging.DEBUG if debug else logging.INFO)
+        self.logger = logging.getLogger('TelloWrapper')
         
         # State variables
         self.battery_level = 0

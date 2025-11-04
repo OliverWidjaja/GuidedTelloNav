@@ -29,9 +29,10 @@ WAYPOINTS = [
     [0, 0.0, 0.5, 0],
     [0, 0.0, 0.75, 0],
 ]
+waypoint_reached = False
 
 # Control parameters
-WAYPOINT_TOLERANCE = 0.1  # meters for position
+WAYPOINT_TOLERANCE = 0.05  # meters for position
 YAW_TOLERANCE = 0.12      # radians for yaw
 KP = [150, 150, 150, 60]  # [Kp_x, Kp_y, Kp_z, Kp_yaw]
 timeout = 1.5
@@ -55,7 +56,7 @@ yaw_controller = PController(kp=KP[3])
 
 
 class BluetoothVESC:    
-    def __init__(self, client: BleakClient, rx_characteristic: Union[BleakGATTCharacteristic, int, str, uuid.UUID], control_period: float = 0.002, debug: bool = False):
+    def __init__(self, client: BleakClient, rx_characteristic: Union[BleakGATTCharacteristic, int, str, uuid.UUID], control_period: float = 0.001, debug: bool = False):
         self.client: BleakClient = client
         self.rx_characteristic: Union[BleakGATTCharacteristic, int, str, uuid.UUID] = rx_characteristic
         self.control_period = control_period
@@ -63,7 +64,7 @@ class BluetoothVESC:
 
         # Setup logging
         logging.basicConfig(level=logging.DEBUG if debug else logging.WARN) # or INFO/ WARNING/ CRITICAL
-        self.logger = logging.getLogger(__name__)
+        self.logger = logging.getLogger('BluetoothVESC')
     
     async def set_pos(self, new_pos, can_id=None):
         if can_id is not None:
@@ -108,7 +109,7 @@ async def as_landing(tello_controller: TelloController, vesc_motor: BluetoothVES
     async def landing_amp(dt=VESC_DT):
         while not landing_complete.is_set():
             # print("Setting current (landing)")
-            await vesc_motor.set_current(-0.4, can_id=0x77)
+            await vesc_motor.set_current(-0.35, can_id=0x77)
             await asyncio.sleep(dt)
     
     async def landing_sequence():
@@ -314,56 +315,65 @@ async def as_mission(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, 
 
         await as_takeoff(tello, vesc_motor)
 
-        # """ 
-        # Altitude Controller
-        # Tello seems to disconnect after finishing takeoff sequence
-        # """
-        for i, waypoint in enumerate(WAYPOINTS):
-            des_x, des_y, des_z, des_yaw = waypoint
-            print(f"Waypoint {i+1}/{len(WAYPOINTS)}: z={des_z}")
+        # endOfTakeoffTime = time.time()
+        # # """ 
+        # # Altitude Controller
+        # # Tello seems to disconnect after finishing takeoff sequence
+        # # """
+        # for i, waypoint in enumerate(WAYPOINTS):
+        #     des_x, des_y, des_z, des_yaw = waypoint
+        #     print(f"Waypoint {i+1}/{len(WAYPOINTS)}: z={des_z}")
             
-            waypoint_start = time.time()
-            waypoint_reached = False
-            while (time.time() - waypoint_start) < 20:
-                streaming_client.update_sync()
-                cur_pos, cur_yaw, cur_vel = get_pose("Tello")
-                if cur_pos is None or cur_vel is None or cur_yaw is None:
-                    time.sleep(0.01)
-                    continue
+        #     waypoint_start = time.time()
+        #     waypoint_reached = False
+        #     while (time.time() - waypoint_start) < 20:
+        #         print(f'timeout clock: {time.time() - waypoint_start}')
+        #         startTime=time.time()
+        #         streaming_client.update_sync()
+        #         # print(time.time() - startTime)
+        #         # tello.send_keepalive()
+        #         cur_pos, cur_yaw, cur_vel = get_pose("Tello")
+        #         if cur_pos is None or cur_vel is None or cur_yaw is None:
+        #             time.sleep(0.01)
+        #             continue
                 
-                # Waypoint tolerance calc
-                err_x = des_x - cur_pos[0]
-                err_y = des_y - cur_pos[1]
-                err_z = des_z - cur_pos[2]
-                err_yaw = des_yaw - cur_yaw
-                dist_error = math.sqrt(err_x ** 2 + err_y ** 2 + err_z ** 2)
-                
-                # if dist_error >= 0: await vesc_motor.set_duty(-0.01, can_id=0x77) # drone should move away from robot
-                # elif dist_error < 0: await vesc_motor.set_duty(-0.02, can_id=0x77) # drone should come back to robot
-                
-                ctrl_x = x_controller.compute(des_x, cur_pos[0], cur_vel[0])
-                ctrl_y = y_controller.compute(des_y, cur_pos[1], cur_vel[1])
-                ctrl_z = z_controller.compute(des_z, cur_pos[2], cur_vel[2])
-                ctrl_yaw = yaw_controller.compute(des_yaw, cur_yaw, 0)
+        #         # Waypoint tolerance calc
+        #         err_x = des_x - cur_pos[0]
+        #         err_y = des_y - cur_pos[1]
+        #         err_z = des_z - cur_pos[2]
+        #         err_yaw = des_yaw - cur_yaw
+        #         dist_error = math.sqrt(err_x ** 2 + err_y ** 2 + err_z ** 2)
+        #         print(f"err z: {err_z}, Tolerance: {WAYPOINT_TOLERANCE}")
 
-                if num_frames % 500 == 0:
-                    print("-----")
-                    print(f"pos {cur_pos[0]}, {cur_pos[1]}, {cur_pos[2]}")
-                    print(f"err {err_x}, {err_y}, {err_z}, {err_yaw}")
-                    print(f"rc control {ctrl_x}, {ctrl_y}, {ctrl_z}, {ctrl_yaw}")
-
-                # tello.send_rc_control(int(ctrl_y),int(ctrl_x),int(ctrl_z), ctrl_yaw) # boolean return says not awaitable
-                tello.send_rc_control(0,0,int(ctrl_z), 0) # boolean return says not awaitable
-
-                if err_z >= 0: await vesc_motor.set_duty(-0.01, can_id=0x77) # drone should move away from robot
-                elif err_z < 0: await vesc_motor.set_duty(-0.04, can_id=0x77) # drone should come back to robot            
+        #         correctionDuty = err_z * 0.08
+        #         print(f"Correction Duty: {correctionDuty} for {err_z}")
                 
-                if err_z <= WAYPOINT_TOLERANCE:
-                    waypoint_reached = True
-                    break
+        #         # if dist_error >= 0: await vesc_motor.set_duty(-0.01, can_id=0x77) # drone should move away from robot
+        #         # elif dist_error < 0: await vesc_motor.set_duty(-0.02, can_id=0x77) # drone should come back to robot
+                
+        #         ctrl_x = x_controller.compute(des_x, cur_pos[0], cur_vel[0])
+        #         ctrl_y = y_controller.compute(des_y, cur_pos[1], cur_vel[1])
+        #         ctrl_z = z_controller.compute(des_z, cur_pos[2], cur_vel[2])
+        #         ctrl_yaw = yaw_controller.compute(des_yaw, cur_yaw, 0)
+
+        #         # print("-----")
+        #         # print(f"pos {cur_pos[0]}, {cur_pos[1]}, {cur_pos[2]}")
+        #         # print(f"err {err_x}, {err_y}, {err_z}, {err_yaw}")
+        #         # print(f"rc control {ctrl_x}, {ctrl_y}, {ctrl_z}, {ctrl_yaw}")
+
+        #         # tello.send_rc_control(int(ctrl_y),int(ctrl_x),int(ctrl_z), ctrl_yaw) # boolean return says not awaitable
+        #         tello.send_rc_control(0,0,int(ctrl_z), 0) # boolean return says not awaitable
+        #         # print(f'end of takeoff time diff {endOfTakeoffTime - time.time()}')
+        #         if err_z >= 0: await vesc_motor.set_duty(correctionDuty, can_id=0x77) # drone should move away from robot
+        #         elif err_z < 0: await vesc_motor.set_duty(correctionDuty, can_id=0x77) # drone should come back to robot            
+                
+        #         if err_z <= WAYPOINT_TOLERANCE:
+        #             print(f"err_z at time of success: {err_z} and tolerance: {WAYPOINT_TOLERANCE}")
+        #             waypoint_reached = True
+        #             break
             
-            if not waypoint_reached:
-                print("Timeout, moving on to next waypoint")
+        #     if not waypoint_reached:
+        #         print("Timeout'd, moving on to next waypoint")
 
         await as_landing(tello, vesc_motor)
         
