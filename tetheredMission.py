@@ -99,63 +99,30 @@ class BluetoothVESC:
             self.last_control_timestamp = time.time()
             await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
 
-async def as_landing(tello_controller: TelloController, vesc_motor: BluetoothVESC):
+async def as_takeoff_land(tello_controller: TelloController, vesc_motor: BluetoothVESC):
     """
-    Run Tello landing asynchronously while simultaneously controlling VESC
+    Asynchronously run Tello (takeoff + landing) while simultaneously controlling VESC
     Returns when landing is complete
     """    
+    takeoff_complete = asyncio.Event()
     landing_complete = asyncio.Event()
 
-    async def landing_amp(dt=VESC_DT):
-        while not landing_complete.is_set():
-            # print("Setting current (landing)")
-            await vesc_motor.set_current(-0.35, can_id=0x77)
-            await asyncio.sleep(dt)
-    
-    async def landing_sequence():
-        """Run the blocking landing command in a thread"""
-        try:
-            await asyncio.to_thread(tello_controller.land)
-            await asyncio.sleep(5)
-
-            landing_complete.set()
-            print("Tello landing command completed")
-        except Exception as e:
-            print(f"Error during landing: {e}")
-            return False
-        return True
-    
-    # Start both tasks concurrently
-    vesc_landing_task = asyncio.create_task(landing_amp())
-    landing_task = asyncio.create_task(landing_sequence())
-    
-    start_time = time.time()
-    print("Initiating landing sequence...")
-    await landing_task
-    print(f"Landing completed. Duration: {time.time() - start_time:.2f} seconds")
-    vesc_landing_task.cancel()
-    print("Landing function ended")
-    
-    return True
-
-async def as_takeoff(tello_controller: TelloController, vesc_motor: BluetoothVESC):
-    """
-    Run Tello takeoff asynchronously while simultaneously controlling VESC
-    Returns when takeoff is complete
-    """    
-    takeoff_complete = asyncio.Event()
-
-    async def takeoff_amp(dt=VESC_DT):
+    async def amp_controller(dt=VESC_DT):
         profile_time = time.time()
-        while not takeoff_complete.is_set():
+        while not takeoff_complete.is_set() and not landing_complete.is_set():
             if time.time() - profile_time < 0.3:
-                # print("Setting duty")
+                print("send da duty")
                 await vesc_motor.set_duty(0.03, can_id=0x77)
             else:
-                # print("Setting current (takeoff)")
+                print("send da takeoff cur")
                 await vesc_motor.set_current(-0.05, can_id=0x77)
             await asyncio.sleep(dt)
-    
+        
+        while takeoff_complete.is_set() and not landing_complete.is_set():
+            print("send da landing cur")
+            await vesc_motor.set_current(-0.35, can_id=0x77)
+            await asyncio.sleep(dt)
+            
     async def takeoff_sequence():
         """Run the blocking takeoff command in a thread"""
         try:
@@ -165,25 +132,53 @@ async def as_takeoff(tello_controller: TelloController, vesc_motor: BluetoothVES
             else:
                 raise Exception("takeoff fail")
             await asyncio.sleep(3) # Mysterious settling time
-            print("Tello takeoff command completed")
         except Exception as e:
             print(f"Error during takeoff: {e}")
             return False
         return True
     
-    # Start both tasks concurrently
-    vesc_takeoff_task = asyncio.create_task(takeoff_amp())
-    takeoff_task = asyncio.create_task(takeoff_sequence())
+    async def landing_sequence():
+        """Run the blocking landing command in a thread"""
+        try:
+            await asyncio.to_thread(tello_controller.land)
+            await asyncio.sleep(5) # Double check this settling time
+            landing_complete.set()
+        except Exception as e:
+            print(f"Error during landing: {e}")
+            return False
+        return True
     
-    start_time = time.time()
-    print("Initiating takeoff sequence...")
-    await takeoff_task
-    print(f"Takeoff completed. Duration: {time.time() - start_time:.2f} seconds")
-    vesc_takeoff_task.cancel()
-    print("Takeoff function ended")
-    
-    return True
+    try:
+        # Start forever-amp controller
+        vesc_task = asyncio.create_task(amp_controller())
 
+        # Take-off block; Is time should vesc or takeoff task be created first?
+        print("Start takeoff")
+        takeoff_task = asyncio.create_task(takeoff_sequence())
+        start_time = time.time()
+        takeoff_success = await takeoff_task
+        if takeoff_success:
+            print(f"Takeoff completed. Duration: {time.time() - start_time:.2f} seconds")
+        else:
+            vesc_task.cancel()
+            raise Exception("Takeoff failed")
+
+        # Landing block
+        print("Start landing")
+        landing_task = asyncio.create_task(landing_sequence())
+        landing_success = await landing_task
+        if landing_success:
+            print(f"Landing completed. Duration: {time.time() - start_time:.2f} seconds")
+        else:
+            vesc_task.cancel()
+            raise Exception("Landing failed")
+        
+        vesc_task.cancel()
+        
+        return True
+    except Exception as e:
+        print(f"Something went wrong: {e}")
+        
 def pchip_traj(waypoints, num_points=50): # change to use VESC_DT
     """Generate interpolated trajectory using PCHIP"""
     waypoints = np.array(waypoints)
@@ -313,69 +308,7 @@ async def as_mission(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, 
         else:
             print(f"Tello battery: {battery}%")
 
-        await as_takeoff(tello, vesc_motor)
-
-        # endOfTakeoffTime = time.time()
-        # # """ 
-        # # Altitude Controller
-        # # Tello seems to disconnect after finishing takeoff sequence
-        # # """
-        # for i, waypoint in enumerate(WAYPOINTS):
-        #     des_x, des_y, des_z, des_yaw = waypoint
-        #     print(f"Waypoint {i+1}/{len(WAYPOINTS)}: z={des_z}")
-            
-        #     waypoint_start = time.time()
-        #     waypoint_reached = False
-        #     while (time.time() - waypoint_start) < 20:
-        #         print(f'timeout clock: {time.time() - waypoint_start}')
-        #         startTime=time.time()
-        #         streaming_client.update_sync()
-        #         # print(time.time() - startTime)
-        #         # tello.send_keepalive()
-        #         cur_pos, cur_yaw, cur_vel = get_pose("Tello")
-        #         if cur_pos is None or cur_vel is None or cur_yaw is None:
-        #             time.sleep(0.01)
-        #             continue
-                
-        #         # Waypoint tolerance calc
-        #         err_x = des_x - cur_pos[0]
-        #         err_y = des_y - cur_pos[1]
-        #         err_z = des_z - cur_pos[2]
-        #         err_yaw = des_yaw - cur_yaw
-        #         dist_error = math.sqrt(err_x ** 2 + err_y ** 2 + err_z ** 2)
-        #         print(f"err z: {err_z}, Tolerance: {WAYPOINT_TOLERANCE}")
-
-        #         correctionDuty = err_z * 0.08
-        #         print(f"Correction Duty: {correctionDuty} for {err_z}")
-                
-        #         # if dist_error >= 0: await vesc_motor.set_duty(-0.01, can_id=0x77) # drone should move away from robot
-        #         # elif dist_error < 0: await vesc_motor.set_duty(-0.02, can_id=0x77) # drone should come back to robot
-                
-        #         ctrl_x = x_controller.compute(des_x, cur_pos[0], cur_vel[0])
-        #         ctrl_y = y_controller.compute(des_y, cur_pos[1], cur_vel[1])
-        #         ctrl_z = z_controller.compute(des_z, cur_pos[2], cur_vel[2])
-        #         ctrl_yaw = yaw_controller.compute(des_yaw, cur_yaw, 0)
-
-        #         # print("-----")
-        #         # print(f"pos {cur_pos[0]}, {cur_pos[1]}, {cur_pos[2]}")
-        #         # print(f"err {err_x}, {err_y}, {err_z}, {err_yaw}")
-        #         # print(f"rc control {ctrl_x}, {ctrl_y}, {ctrl_z}, {ctrl_yaw}")
-
-        #         # tello.send_rc_control(int(ctrl_y),int(ctrl_x),int(ctrl_z), ctrl_yaw) # boolean return says not awaitable
-        #         tello.send_rc_control(0,0,int(ctrl_z), 0) # boolean return says not awaitable
-        #         # print(f'end of takeoff time diff {endOfTakeoffTime - time.time()}')
-        #         if err_z >= 0: await vesc_motor.set_duty(correctionDuty, can_id=0x77) # drone should move away from robot
-        #         elif err_z < 0: await vesc_motor.set_duty(correctionDuty, can_id=0x77) # drone should come back to robot            
-                
-        #         if err_z <= WAYPOINT_TOLERANCE:
-        #             print(f"err_z at time of success: {err_z} and tolerance: {WAYPOINT_TOLERANCE}")
-        #             waypoint_reached = True
-        #             break
-            
-        #     if not waypoint_reached:
-        #         print("Timeout'd, moving on to next waypoint")
-
-        await as_landing(tello, vesc_motor)
+        await as_takeoff_land(tello, vesc_motor)
         
         print("Mission complete! Landing...")
     except KeyboardInterrupt:
