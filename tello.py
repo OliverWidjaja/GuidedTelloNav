@@ -43,9 +43,10 @@ class TelloController:
             return False
         
         try:
-            ret = self.tello.takeoff()
+            # ret = self.tello.takeoff()
+            self.tello.send_command_without_return("takeoff")
             self.logger.info("Takeoff command sent")
-            return ret
+            return True
         except Exception as e:
             self.logger.error(f"Takeoff failed: {e}")
             return False

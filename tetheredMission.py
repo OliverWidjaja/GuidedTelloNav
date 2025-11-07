@@ -13,6 +13,7 @@ from typing import Union
 import uuid
 from bleak.backends.characteristic import BleakGATTCharacteristic
 import logging
+from enum import Enum, auto
 
 # VESC Bluetooth configuration
 BLE_ADDRESS = "CF:9D:22:EF:60:F9"
@@ -35,7 +36,8 @@ waypoint_reached = False
 WAYPOINT_TOLERANCE = 0.05  # meters for position
 YAW_TOLERANCE = 0.12      # radians for yaw
 KP = [150, 150, 150, 60]  # [Kp_x, Kp_y, Kp_z, Kp_yaw]
-timeout = 1.5
+TIMEOUT = 1.5
+IDLE_TAKEOFF_TIME = 3
 
 # Optitrack variables
 id_name = {}  # mapping from ID to name
@@ -47,24 +49,33 @@ prev_position = None
 prev_time = None
 velocity = [0.0, 0.0, 0.0]  # [vx, vy, vz] in m/s
 
-VESC_DT = 0.005
+VESC_DT = 0.05
 
 x_controller = PController(kp=KP[0])
 y_controller = PController(kp=KP[1])
 z_controller = PController(kp=KP[2])
 yaw_controller = PController(kp=KP[3])
 
+class State(Enum):
+    IDLE = 0
+    TAKEOFF = 1
+    ALTITUDE_CONTROL = 2
+    LANDING = 3
+    IDLE_2 = 4
+
+state = State.IDLE
+last_event_time = time.time()
 
 class BluetoothVESC:    
     def __init__(self, client: BleakClient, rx_characteristic: Union[BleakGATTCharacteristic, int, str, uuid.UUID], control_period: float = 0.001, debug: bool = False):
         self.client: BleakClient = client
         self.rx_characteristic: Union[BleakGATTCharacteristic, int, str, uuid.UUID] = rx_characteristic
-        self.control_period = control_period
-        self.last_control_timestamp = time.time()
 
         # Setup logging
         logging.basicConfig(level=logging.DEBUG if debug else logging.WARN) # or INFO/ WARNING/ CRITICAL
         self.logger = logging.getLogger('BluetoothVESC')
+
+        self.last_call_time = time.time()
     
     async def set_pos(self, new_pos, can_id=None):
         if can_id is not None:
@@ -73,9 +84,7 @@ class BluetoothVESC:
             buffer = encode(SetPosition(new_pos))
         
         self.logger.info(f"Sending position command: {new_pos}° (CAN ID: {can_id})")
-        if time.time() - self.last_control_timestamp > self.control_period:
-            self.last_control_timestamp = time.time()
-            await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
+        await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
 
     async def set_current(self, new_current, can_id=None):
         if can_id is not None:
@@ -84,9 +93,11 @@ class BluetoothVESC:
             buffer = encode(SetCurrent(new_current))
         
         self.logger.info(f"Sending current command: {new_current} mA (CAN ID: {can_id})")
-        if time.time() - self.last_control_timestamp > self.control_period:
-            self.last_control_timestamp = time.time()
-            await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
+        await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
+        time_past = time.time() - self.last_call_time
+        if time_past > 0.1:
+            print("Once")
+        self.last_call_time = time.time()
     
     async def set_duty(self, new_duty, can_id=None):
         if can_id is not None:
@@ -95,90 +106,151 @@ class BluetoothVESC:
             buffer = encode(SetDutyCycle(new_duty))
         
         self.logger.info(f"Sending duty command: {new_duty} mA (CAN ID: {can_id})")
-        if time.time() - self.last_control_timestamp > self.control_period:
-            self.last_control_timestamp = time.time()
-            await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
+        await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
 
-async def as_takeoff_land(tello_controller: TelloController, vesc_motor: BluetoothVESC):
-    """
-    Asynchronously run Tello (takeoff + landing) while simultaneously controlling VESC
-    Returns when landing is complete
-    """    
-    takeoff_complete = asyncio.Event()
-    landing_complete = asyncio.Event()
-
-    async def amp_controller(dt=VESC_DT):
-        profile_time = time.time()
-        while not takeoff_complete.is_set() and not landing_complete.is_set():
-            if time.time() - profile_time < 0.3:
-                print("send da duty")
-                await vesc_motor.set_duty(0.03, can_id=0x77)
-            else:
-                print("send da takeoff cur")
-                await vesc_motor.set_current(-0.05, can_id=0x77)
-            await asyncio.sleep(dt)
-        
-        while takeoff_complete.is_set() and not landing_complete.is_set():
-            print("send da landing cur")
-            await vesc_motor.set_current(-0.35, can_id=0x77)
-            await asyncio.sleep(dt)
+async def VESC_thread(vesc_motor: BluetoothVESC):
+    """VESC FSM Control Thread"""
+    global state
+    global last_event_time
+    while True:
+        try:
+            if state == State.IDLE:
+                await vesc_motor.set_current(0, can_id=0x77)
             
-    async def takeoff_sequence():
-        """Run the blocking takeoff command in a thread"""
-        try:
-            ret = await asyncio.to_thread(tello_controller.takeoff)
-            if ret: 
-                takeoff_complete.set()
-            else:
-                raise Exception("takeoff fail")
-            await asyncio.sleep(3) # Mysterious settling time
+            elif state == State.TAKEOFF:                
+                elapsed_time = time.time() - last_event_time
+                if elapsed_time < 0.3:
+                    await vesc_motor.set_duty(0.03, can_id=0x77)
+                else:
+                    await vesc_motor.set_current(-0.05, can_id=0x77)
+            
+            elif state == State.ALTITUDE_CONTROL:
+                await vesc_motor.set_current(-0.05, can_id=0x77)
+            
+            elif state == State.LANDING:
+                await vesc_motor.set_current(-0.35, can_id=0x77)
+            await asyncio.sleep(VESC_DT)
+            
         except Exception as e:
-            print(f"Error during takeoff: {e}")
-            return False
-        return True
+            print(f"VESC thread error: {e}")
+            raise e
+
+async def Tello_thread(tello: TelloController):
+    """Tello FSM Control Thread"""
+    global state
+    global last_event_time
+    mission_complete = False
     
-    async def landing_sequence():
-        """Run the blocking landing command in a thread"""
+    while not mission_complete:
         try:
-            await asyncio.to_thread(tello_controller.land)
-            await asyncio.sleep(5) # Double check this settling time
-            landing_complete.set()
+            if state == State.IDLE:
+                _ = tello.get_battery()
+                if time.time() - last_event_time >= IDLE_TAKEOFF_TIME:
+
+                    tello.takeoff()
+                    await asyncio.sleep(0.3)
+
+                    state = State.TAKEOFF
+                    print("Tello: Transition to TAKEOFF state")
+                    last_event_time = time.time()
+            
+            elif state == State.TAKEOFF:
+                # takeoff_success = tello.takeoff()
+                # await asyncio.sleep(0.3)
+                # if takeoff_success:
+                #     print("Tello: Takeoff successful")
+                #     await asyncio.sleep(3)
+                #     state = State.ALTITUDE_CONTROL
+                # else:
+                #     print("Tello: Takeoff failed!")
+                #     state = State.IDLE_2
+                await asyncio.sleep(3)
+                state = State.ALTITUDE_CONTROL
+        
+            elif state == State.ALTITUDE_CONTROL:  # ALTITUDE CONTROL
+                print("Tello: Transition to ALTITUDE_CONTROL state")
+                try:
+                    print("Tello: Starting mission waypoints")
+                    await asyncio.sleep(5)  # Hover time
+                    
+                    state = State.LANDING
+                    
+                except Exception as e:
+                    print(f"Tello mission error: {e}")
+                    state = State.IDLE_2
+            
+            elif state == State.LANDING:
+                print("Tello: Transition to LANDING state")
+                
+                # Execute landing
+                landing_success = tello.land()
+                if landing_success:
+                    print("Tello: Landing successful")
+                    await asyncio.sleep(5)
+                else:
+                    print("Tello: Landing failed!")
+                    # Try emergency stop
+                    tello.emergency_stop()
+                
+                state = State.IDLE_2
+                mission_complete = True
+        
+            await asyncio.sleep(0.1)  # Tello control loop frequency
+            
         except Exception as e:
-            print(f"Error during landing: {e}")
-            return False
-        return True
+            print(f"Tello thread error: {e}")
+            raise e
+
+async def entry_2(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tello: TelloController):    
+    """Main mission entry point"""
+    global state
+    global last_event_time
+    last_event_time = time.time()
+    state = State.IDLE
+
+    # Start both control threads
+    vesc_task = asyncio.create_task(VESC_thread(vesc_motor))
+    tello_task = asyncio.create_task(Tello_thread(tello))
     
     try:
-        # Start forever-amp controller
-        vesc_task = asyncio.create_task(amp_controller())
-
-        # Take-off block; Is time should vesc or takeoff task be created first?
-        print("Start takeoff")
-        takeoff_task = asyncio.create_task(takeoff_sequence())
-        start_time = time.time()
-        takeoff_success = await takeoff_task
-        if takeoff_success:
-            print(f"Takeoff completed. Duration: {time.time() - start_time:.2f} seconds")
+        battery = tello.get_battery()
+        if battery is not None and battery < 20:
+            print(f"Low battery warning {battery}% - Aborting mission")
+            return
         else:
-            vesc_task.cancel()
-            raise Exception("Takeoff failed")
-
-        # Landing block
-        print("Start landing")
-        landing_task = asyncio.create_task(landing_sequence())
-        landing_success = await landing_task
-        if landing_success:
-            print(f"Landing completed. Duration: {time.time() - start_time:.2f} seconds")
-        else:
-            vesc_task.cancel()
-            raise Exception("Landing failed")
+            print(f"Tello battery: {battery}%")
         
-        vesc_task.cancel()
+        # Start mission - transition to takeoff state
+        print("Starting mission - transitioning to TAKEOFF state")
         
-        return True
+        # Wait for mission completion
+        await tello_task
+        
+        print("Mission complete!")
+        
+    except KeyboardInterrupt:
+        print("Mission interrupted by user")
+        state = State.IDLE_2  # Emergency landing
+        await asyncio.sleep(7)  # Give time for landing
+        
     except Exception as e:
-        print(f"Something went wrong: {e}")
+        print(f"Mission error: {e}")
+        state = State.IDLE_2  # Emergency landing
+        await asyncio.sleep(7)  # Give time for landing
         
+    finally:
+        # Cancel tasks
+        vesc_task.cancel()
+        if not tello_task.done():
+            tello_task.cancel()
+        
+        # Wait for tasks to complete cancellation
+        try:
+            await asyncio.gather(vesc_task, tello_task, return_exceptions=True)
+        except asyncio.CancelledError:
+            pass
+
+
 def pchip_traj(waypoints, num_points=50): # change to use VESC_DT
     """Generate interpolated trajectory using PCHIP"""
     waypoints = np.array(waypoints)
@@ -297,29 +369,8 @@ def get_pose(name):
         return position, yaw, current_velocity
     return None, None, None
 
-async def as_mission(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tello: TelloController):    
-    # traj = pchip_traj(waypoints=WAYPOINTS, num_points=int(round(1/VESC_DT)))
-
-    try:
-        battery = tello.get_battery()
-        if battery is not None and battery < 20:
-            print(f"Low battery warning {battery}%")
-            raise Exception("Low battery")
-        else:
-            print(f"Tello battery: {battery}%")
-
-        await as_takeoff_land(tello, vesc_motor)
-        
-        print("Mission complete! Landing...")
-    except KeyboardInterrupt:
-        """ Hard landing """
-        print("Mission interrupted by user")
-        tello.land()
-
 async def main():
-    # # Tello Network Connection
-    # os.system(f'''cmd /c "netsh wlan connect name=TELLO-56FD1B"''')
-
+    # Tello Connection
     tello = TelloController()
     tello.connect()
 
@@ -341,7 +392,7 @@ async def main():
         with streaming_client:
             streaming_client.request_modeldef()
             
-            await as_mission(streaming_client, vesc_motor, tello)
+            await entry_2(streaming_client, vesc_motor, tello)
 
     tello.disconnect()
 
