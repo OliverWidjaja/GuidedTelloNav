@@ -153,15 +153,6 @@ async def Tello_thread(tello: TelloController):
                     await tello.takeoff()
             
             elif state == State.TAKEOFF:
-                # takeoff_success = tello.takeoff()
-                # await asyncio.sleep(0.3)
-                # if takeoff_success:
-                #     print("Tello: Takeoff successful")
-                #     await asyncio.sleep(3)
-                #     state = State.ALTITUDE_CONTROL
-                # else:
-                #     print("Tello: Takeoff failed!")
-                #     state = State.IDLE_2
                 await asyncio.sleep(3)
                 state = State.ALTITUDE_CONTROL
         
@@ -180,15 +171,16 @@ async def Tello_thread(tello: TelloController):
             elif state == State.LANDING:
                 print("Tello: Transition to LANDING state")
                 
+                await tello.land()
                 # Execute landing
-                landing_success = tello.land()
-                if landing_success:
-                    print("Tello: Landing successful")
-                    await asyncio.sleep(5)
-                else:
-                    print("Tello: Landing failed!")
-                    # Try emergency stop
-                    tello.emergency_stop()
+                # landing_success = tello.land()
+                # if landing_success:
+                #     print("Tello: Landing successful")
+                #     await asyncio.sleep(5)
+                # else:
+                #     print("Tello: Landing failed!")
+                #     # Try emergency stop
+                #     tello.emergency_stop()
                 
                 state = State.IDLE_2
                 mission_complete = True
