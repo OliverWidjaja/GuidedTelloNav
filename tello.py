@@ -168,50 +168,9 @@ class TelloController:
                     clamp100(up_down),
                     clamp100(yaw)
                 )
-                # ---
-                response = "max retries exceeded"
-                for i in range(0, self.tello.retry_count):
-                    # ---
-                    diff = time.time() - self.tello.last_received_command_timestamp
-                    if diff < Tello.TIME_BTW_COMMANDS:
-                        self.tello.LOGGER.debug('Waiting {} seconds to execute command: {}...'.format(diff, cmd))
-                        time.sleep(diff)
-
-                    self.tello.LOGGER.info("Send command: '{}'".format(cmd))
-                    timestamp = time.time()
-
-                    Tello.client_socket.sendto(cmd.encode('utf-8'), self.tello.address)
-
-                    responses = self.tello.get_own_udp_object()['responses']
-
-                    while not responses:
-                        if time.time() - timestamp > Tello.TIME_BTW_COMMANDS:
-                            message = "Aborting command '{}'. Did not receive a response after {} seconds".format(cmd, Tello.TIME_BTW_COMMANDS)
-                            self.tello.LOGGER.warning(message)
-                            return message
-                        time.sleep(0.1)  # Sleep during send command
-
-                    self.tello.last_received_command_timestamp = time.time()
-
-                    first_response = responses.pop(0)  # first datum from socket
-                    try:
-                        response = first_response.decode("utf-8")
-                    except UnicodeDecodeError as e:
-                        self.tello.LOGGER.error(e)
-                        return "response decode error"
-                    response = response.rstrip("\r\n")
-
-                    self.tello.LOGGER.info("Response {}: '{}'".format(cmd, response))
-                    # ---
-
-                    if 'ok' in response.lower():
-                        self.logger.info("RC command sent")
-                        return True
-
-                    self.tello.LOGGER.debug("Command attempt #{} failed for command: '{}'".format(i, cmd))
-
-                self.tello.raise_result_error(cmd, response)
-                # ---
+                
+                self.tello.LOGGER.info("Send command (no response expected): '{}'".format(cmd))
+                Tello.client_socket.sendto(cmd.encode('utf-8'), self.tello.address)
         except Exception as e:
             self.logger.error(f"RC control failed: {e}")
             return False
