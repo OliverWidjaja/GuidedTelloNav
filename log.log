@@ -1,8 +1,2 @@
 INFO:djitellopy:Tello instance was initialized. Host: '192.168.10.1'. Port: '8889'.
 INFO:djitellopy:Send command: 'command'
-ERROR:djitellopy:'utf-8' codec can't decode byte 0xcc in position 0: invalid continuation byte
-INFO:djitellopy:Send command: 'command'
-INFO:djitellopy:Response command: 'ok'
-WARNING:djitellopy:'.connect()' received first state packet after 0.05 seconds
-INFO:TelloWrapper:Connected to Tello! Battery: 17%
-INFO:TelloWrapper:Disconnected from Tello

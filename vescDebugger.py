@@ -3,7 +3,7 @@ from bleak import BleakClient
 from pyvesc.protocol.interface import encode
 from pyvesc.VESC.messages import SetPosition, SetCurrent, SetCurrentBrake, SetDutyCycle, SetRPM 
 import time
-ADDRESS = "CF:9D:22:EF:60:F9"
+ADDRESS = "D5:38:71:28:C1:36"
 RX_CHARACTERISTIC = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
 TX_CHARACTERISTIC = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 
@@ -61,11 +61,8 @@ class BluetoothVESC:
 async def run_traj(motor: BluetoothVESC):
     print("Executing trajectory...")
     while True:
-        await motor.set_current(-0.01, can_id=0x77)
+        await motor.set_duty_cycle(0.03)
         await asyncio.sleep(0.05)
-        # await motor.set_duty_cycle(0.03)
-
-        # await motor.set_duty_cycle(-0.2)
 
 async def main(address):
     async with BleakClient(address) as client:

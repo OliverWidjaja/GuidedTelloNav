@@ -16,7 +16,7 @@ import logging
 from enum import Enum, auto
 
 # VESC Bluetooth configuration
-BLE_ADDRESS = "CF:9D:22:EF:60:F9"
+BLE_ADDRESS = "D5:38:71:28:C1:36"
 VESC_RX_CHARACTERISTIC = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
 VESC_TX_CHARACTERISTIC = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 
@@ -147,7 +147,7 @@ async def Tello_thread(tello: TelloController):
                 _ = tello.get_battery()
                 if time.time() - last_event_time >= IDLE_TAKEOFF_TIME:
 
-                    tello.takeoff()
+                    await tello.takeoff()
                     await asyncio.sleep(0.3)
 
                     state = State.TAKEOFF

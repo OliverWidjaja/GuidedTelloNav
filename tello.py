@@ -1,6 +1,7 @@
 from djitellopy import Tello
 import time
 import logging
+import asyncio
 
 class TelloController:
     def __init__(self, debug=True):
@@ -36,17 +37,59 @@ class TelloController:
             self.is_connected = False
             self.logger.info("Disconnected from Tello")
     
-    def takeoff(self):
+    async def takeoff(self):
         """Takeoff drone"""
         if not self.is_connected:
             self.logger.error("Not connected to Tello")
             return False
         
         try:
-            # ret = self.tello.takeoff()
-            self.tello.send_command_without_return("takeoff")
-            self.logger.info("Takeoff command sent")
-            return True
+            # Something it takes a looooot of time to take off and return a succesful takeoff.
+            # So we better wait. Otherwise, it would give us an error on the following calls.
+            response = "max retries exceeded"
+            command = 'takeoff'
+            for i in range(0, self.tello.retry_count):
+                diff = time.time() - self.tello.last_received_command_timestamp
+                if diff < Tello.TIME_BTW_COMMANDS:
+                    self.tello.LOGGER.debug('Waiting {} seconds to execute command: {}...'.format(diff, command))
+                    await asyncio.sleep(diff)
+
+                self.tello.LOGGER.info(f"Send command: {command}")
+                timestamp = time.time()
+
+                Tello.client_socket.sendto(command.encode('utf-8'), self.tello.address)
+
+                responses = self.tello.get_own_udp_object()['responses']
+
+                while not responses:
+                    if time.time() - timestamp > Tello.TAKEOFF_TIMEOUT:
+                        message = "Aborting command '{}'. Did not receive a response after {} seconds".format(command, Tello.TIME_BTW_COMMANDS)
+                        self.tello.LOGGER.warning(message)
+                        print("5")
+                        raise Exception(message)
+                    await asyncio.sleep(0.1)  # Sleep during send command
+
+                self.tello.last_received_command_timestamp = time.time()
+
+                first_response = responses.pop(0)  # first datum from socket
+                try:
+                    response = first_response.decode("utf-8")
+                except UnicodeDecodeError as e:
+                    self.tello.LOGGER.error(e)
+                    # return "response decode error"
+                    raise Exception("response decode error")
+                response = response.rstrip("\r\n")
+
+                self.tello.LOGGER.info("Response {}: '{}'".format(command, response))
+            
+                if 'ok' in response.lower():
+                    self.is_flying = True
+                    self.logger.info("Takeoff command sent")
+                    return True
+
+                self.tello.LOGGER.debug("Command attempt #{} failed for command: '{}'".format(i, command))
+
+            self.tello.raise_result_error(command, response)
         except Exception as e:
             self.logger.error(f"Takeoff failed: {e}")
             return False
