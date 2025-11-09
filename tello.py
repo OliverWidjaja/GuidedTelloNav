@@ -3,6 +3,7 @@ import time
 import logging
 import asyncio
 
+
 class TelloController:
     def __init__(self, debug=True):
         """
@@ -29,7 +30,6 @@ class TelloController:
         self.battery_level = self.tello.get_battery()
         self.logger.info(f"Connected to Tello! Battery: {self.battery_level}%")
 
-    
     def disconnect(self):
         """Disconnect from Tello drone"""
         self.tello.end()
@@ -37,6 +37,7 @@ class TelloController:
             self.is_connected = False
             self.logger.info("Disconnected from Tello")
     
+    # Async functions
     async def takeoff(self):
         """Takeoff drone"""
         if not self.is_connected:
@@ -138,8 +139,8 @@ class TelloController:
                 self.tello.LOGGER.info("Response {}: '{}'".format(command, response))
             
                 if 'ok' in response.lower():
-                    self.is_flying = True
-                    self.logger.info("Takeoff command sent")
+                    self.is_flying = False
+                    self.logger.info("Landing command sent")
                     return True
 
                 self.tello.LOGGER.debug("Command attempt #{} failed for command: '{}'".format(i, command))
@@ -149,6 +150,72 @@ class TelloController:
             self.logger.error(f"Land failed: {e}")
             return False
     
+    async def rc(self, left_right: int, forward_back: int, up_down: int, yaw: int):
+        """ RC Control to Drone """
+        if not self.is_connected:
+            self.logger.error("Not connected to Tello")
+            return False
+        
+        try:
+            def clamp100(x: int) -> int:
+                return max(-100, min(100, x))
+
+            if time.time() - self.tello.last_rc_control_timestamp > Tello.TIME_BTW_RC_CONTROL_COMMANDS:
+                self.tello.last_rc_control_timestamp = time.time()
+                cmd = 'rc {} {} {} {}'.format(
+                    clamp100(left_right),
+                    clamp100(forward_back),
+                    clamp100(up_down),
+                    clamp100(yaw)
+                )
+                # ---
+                response = "max retries exceeded"
+                for i in range(0, self.tello.retry_count):
+                    # ---
+                    diff = time.time() - self.tello.last_received_command_timestamp
+                    if diff < Tello.TIME_BTW_COMMANDS:
+                        self.tello.LOGGER.debug('Waiting {} seconds to execute command: {}...'.format(diff, cmd))
+                        time.sleep(diff)
+
+                    self.tello.LOGGER.info("Send command: '{}'".format(cmd))
+                    timestamp = time.time()
+
+                    Tello.client_socket.sendto(cmd.encode('utf-8'), self.tello.address)
+
+                    responses = self.tello.get_own_udp_object()['responses']
+
+                    while not responses:
+                        if time.time() - timestamp > Tello.TIME_BTW_COMMANDS:
+                            message = "Aborting command '{}'. Did not receive a response after {} seconds".format(cmd, Tello.TIME_BTW_COMMANDS)
+                            self.tello.LOGGER.warning(message)
+                            return message
+                        time.sleep(0.1)  # Sleep during send command
+
+                    self.tello.last_received_command_timestamp = time.time()
+
+                    first_response = responses.pop(0)  # first datum from socket
+                    try:
+                        response = first_response.decode("utf-8")
+                    except UnicodeDecodeError as e:
+                        self.tello.LOGGER.error(e)
+                        return "response decode error"
+                    response = response.rstrip("\r\n")
+
+                    self.tello.LOGGER.info("Response {}: '{}'".format(cmd, response))
+                    # ---
+
+                    if 'ok' in response.lower():
+                        self.logger.info("RC command sent")
+                        return True
+
+                    self.tello.LOGGER.debug("Command attempt #{} failed for command: '{}'".format(i, cmd))
+
+                self.tello.raise_result_error(cmd, response)
+                # ---
+        except Exception as e:
+            self.logger.error(f"RC control failed: {e}")
+            return False
+        
     def emergency_stop(self):
         """Emergency stop - immediately stops motors"""
         if not self.is_connected:

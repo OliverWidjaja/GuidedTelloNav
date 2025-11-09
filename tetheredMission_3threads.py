@@ -8,21 +8,16 @@ import asyncio
 from bleak import BleakClient
 from pyvesc.protocol.interface import encode
 from pyvesc.VESC.messages import SetCurrent, SetPosition, SetDutyCycle
-import os
 from typing import Union
 import uuid
 from bleak.backends.characteristic import BleakGATTCharacteristic
 import logging
-from enum import Enum, auto
+from enum import Enum
 
 # VESC Bluetooth configuration
 BLE_ADDRESS = "D5:38:71:28:C1:36"
 VESC_RX_CHARACTERISTIC = "6e400002-b5a3-f393-e0a9-e50e24dcca9e"
 VESC_TX_CHARACTERISTIC = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
-
-# Tello WiFi SSIDs
-# TELLO-B6426A
-# TELLO-56FD1B
 
 # Waypoints: [x, y, z, yaw] in meters and radians
 WAYPOINTS = [
@@ -30,7 +25,6 @@ WAYPOINTS = [
     [0, 0.0, 0.5, 0],
     [0, 0.0, 0.75, 0],
 ]
-waypoint_reached = False
 
 # Control parameters
 WAYPOINT_TOLERANCE = 0.05  # meters for position
@@ -38,23 +32,7 @@ YAW_TOLERANCE = 0.12      # radians for yaw
 KP = [150, 150, 150, 60]  # [Kp_x, Kp_y, Kp_z, Kp_yaw]
 TIMEOUT = 1.5
 IDLE_TAKEOFF_TIME = 3
-
-# Optitrack variables
-id_name = {}  # mapping from ID to name
-rigid_bodies = {}
-num_frames = 0
-
-# Velocity variables
-prev_position = None
-prev_time = None
-velocity = [0.0, 0.0, 0.0]  # [vx, vy, vz] in m/s
-
 VESC_DT = 0.05
-
-x_controller = PController(kp=KP[0])
-y_controller = PController(kp=KP[1])
-z_controller = PController(kp=KP[2])
-yaw_controller = PController(kp=KP[3])
 
 class State(Enum):
     IDLE = 0
@@ -63,8 +41,26 @@ class State(Enum):
     LANDING = 3
     IDLE_2 = 4
 
+# Optitrack variables
+id_name = {}  # mapping from ID to name
+rigid_bodies = {}
+num_frames = 0
+tello_pose_lock = asyncio.Lock()  # Changed to asyncio Lock for async access
+tello_pose = None  # Will store [position, yaw, velocity]
+
+# Velocity variables
+prev_position = None
+prev_time = None
+velocity = [0.0, 0.0, 0.0]  # [vx, vy, vz] in m/s
+
+x_controller = PController(kp=KP[0])
+y_controller = PController(kp=KP[1])
+z_controller = PController(kp=KP[2])
+yaw_controller = PController(kp=KP[3])
+
 state = State.IDLE
 last_event_time = time.time()
+waypoint_reached = False
 
 class BluetoothVESC:    
     def __init__(self, client: BleakClient, rx_characteristic: Union[BleakGATTCharacteristic, int, str, uuid.UUID], control_period: float = 0.001, debug: bool = False):
@@ -123,7 +119,7 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
                 elif elapsed_time >= 0.3:
                     await vesc_motor.set_current(-0.05, can_id=0x77)
             elif state == State.ALTITUDE_CONTROL:
-                await vesc_motor.set_current(-0.045, can_id=0x77)
+                await vesc_motor.set_current(0, can_id=0x77)
             elif state == State.LANDING:
                 await vesc_motor.set_current(-0.35, can_id=0x77)
             await asyncio.sleep(VESC_DT)
@@ -136,6 +132,8 @@ async def Tello_thread(tello: TelloController):
     global state
     global last_event_time
     mission_complete = False
+    hover_start_time = None
+    hover_duration = 5.0  # Hover for 5 seconds
     
     while not mission_complete:
         try:
@@ -149,24 +147,57 @@ async def Tello_thread(tello: TelloController):
             elif state == State.TAKEOFF:
                 await asyncio.sleep(3)
                 state = State.ALTITUDE_CONTROL
-            elif state == State.ALTITUDE_CONTROL:  # ALTITUDE CONTROL
                 print("Tello: Transition to ALTITUDE_CONTROL state")
-                try:
-                    print("Tello: Starting mission waypoints")
-                    state = State.LANDING
-                except Exception as e:
-                    print(f"Tello mission error: {e}")
-                    state = State.IDLE_2
+                hover_start_time = time.time()
+            elif state == State.ALTITUDE_CONTROL:
+                current_pose = tello_pose
+                
+                if current_pose is not None:
+                    position, yaw, velocity = current_pose
+                    print(f"Tello Pose - Position: {position}, Yaw: {yaw:.3f} rad, Velocity: {velocity}")
+                    
+                    await tello.rc(0, 0, 0, 0)
+                    
+                    if hover_start_time is not None and (time.time() - hover_start_time) >= hover_duration:
+                        print(f"Hovering complete ({hover_duration} seconds), transitioning to LANDING")
+                        state = State.LANDING
+                else:
+                    print("Waiting for Tello pose data...")
+                    await tello.rc(0, 0, 0, 0)
+                
+                await asyncio.sleep(0.1)  # Control loop frequency
+                
             elif state == State.LANDING:
                 print("Tello: Transition to LANDING state")
-                await tello.land() # async land below or after State change
+                # Stop any movement before landing
+                await tello.rc(0, 0, 0, 0) 
+                await asyncio.sleep(0.5)
+                await tello.land()
                 state = State.IDLE_2
                 mission_complete = True
         
-            await asyncio.sleep(0.1)  # Tello control loop frequency    
         except Exception as e:
             print(f"Tello thread error: {e}")
             raise e
+
+async def NatNet_thread(streaming_client: NatNetClient, tello_name: str = "Tello"):
+    """ NatNet Client Thread - Now async """
+    global tello_pose
+    
+    try:
+        streaming_client.run_async()
+        while True:
+            position, yaw, velocity = get_pose(tello_name)
+
+            if position is not None and yaw is not None and velocity is not None:
+                tello_pose = [position, yaw, velocity]
+
+            await asyncio.sleep(0.01)  # 100 Hz update rate - changed to async sleep
+    except Exception as e:
+        print(f"NatNet thread error: {e}")
+    finally:
+        streaming_client.stop_async()
+        print("NatNet thread stopped")
 
 async def entry_2(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tello: TelloController):    
     """Main mission entry point"""
@@ -175,7 +206,8 @@ async def entry_2(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tel
     last_event_time = time.time()
     state = State.IDLE
 
-    # Start both control threads
+    # Start NatNet thread as async task
+    natnet_task = asyncio.create_task(NatNet_thread(streaming_client, "Tello"))
     vesc_task = asyncio.create_task(VESC_thread(vesc_motor))
     tello_task = asyncio.create_task(Tello_thread(tello))
     
@@ -188,7 +220,7 @@ async def entry_2(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tel
             print(f"Tello battery: {battery}%")
         
         print("Starting mission - transitioning to TAKEOFF state")
-        await tello_task
+        await asyncio.gather(tello_task, natnet_task, return_exceptions=True)
         print("Mission complete!")
     except KeyboardInterrupt:
         print("Mission interrupted by user")
@@ -201,14 +233,14 @@ async def entry_2(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tel
         await asyncio.sleep(7)  # Give time for landing
     finally:
         vesc_task.cancel()
+        natnet_task.cancel()
         if not tello_task.done():
             tello_task.cancel()
         
         try:
-            await asyncio.gather(vesc_task, tello_task, return_exceptions=True)
+            await asyncio.gather(vesc_task, natnet_task, tello_task, return_exceptions=True)
         except asyncio.CancelledError:
             pass
-
 
 def pchip_traj(waypoints, num_points=50): # change to use VESC_DT
     """Generate interpolated trajectory using PCHIP"""
