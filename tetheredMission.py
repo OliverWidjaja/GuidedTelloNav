@@ -112,6 +112,7 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
     """VESC FSM Control Thread"""
     global state
     global last_event_time
+
     while True:
         try:
             if state == State.IDLE:
@@ -121,11 +122,11 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
                 elapsed_time = time.time() - last_event_time
                 if elapsed_time < 0.3:
                     await vesc_motor.set_duty(0.03, can_id=0x77)
-                else:
+                elif elapsed_time >= 0.3:
                     await vesc_motor.set_current(-0.05, can_id=0x77)
             
             elif state == State.ALTITUDE_CONTROL:
-                await vesc_motor.set_current(-0.05, can_id=0x77)
+                await vesc_motor.set_current(-0.045, can_id=0x77)
             
             elif state == State.LANDING:
                 await vesc_motor.set_current(-0.35, can_id=0x77)
@@ -146,13 +147,10 @@ async def Tello_thread(tello: TelloController):
             if state == State.IDLE:
                 _ = tello.get_battery()
                 if time.time() - last_event_time >= IDLE_TAKEOFF_TIME:
-
-                    await tello.takeoff()
-                    await asyncio.sleep(0.3)
-
                     state = State.TAKEOFF
                     print("Tello: Transition to TAKEOFF state")
                     last_event_time = time.time()
+                    await tello.takeoff()
             
             elif state == State.TAKEOFF:
                 # takeoff_success = tello.takeoff()
