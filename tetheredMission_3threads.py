@@ -118,8 +118,7 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
                 elif elapsed_time >= 0.3:
                     await vesc_motor.set_current(-0.05, can_id=0x77)
             elif state == State.ALTITUDE_CONTROL:
-                # await vesc_motor.set_current(0, can_id=0x77)
-                pass
+                await vesc_motor.set_current(0, can_id=0x77)
             elif state == State.LANDING:
                 await vesc_motor.set_current(-0.35, can_id=0x77)
             await asyncio.sleep(VESC_DT)
@@ -132,8 +131,8 @@ async def Tello_thread(tello: TelloController):
     global state
     global last_event_time
     mission_complete = False
-    hover_start_time = None
-    hover_duration = 5.0  # Hover for 5 seconds
+    # hover_start_time = None
+    # hover_duration = 5.0  # Hover for 5 seconds
     
     while not mission_complete:
         try:
@@ -146,11 +145,11 @@ async def Tello_thread(tello: TelloController):
                     await tello.takeoff()
             elif state == State.TAKEOFF:
                 await asyncio.sleep(3)
-                # state = State.ALTITUDE_CONTROL
-                state = State.LANDING # for testing
-
+                state = State.ALTITUDE_CONTROL
                 print("Tello: Transition to ALTITUDE_CONTROL state")
-                hover_start_time = time.time()
+                # state = State.LANDING # for testing
+
+                # hover_start_time = time.time()
             elif state == State.ALTITUDE_CONTROL:
                 # current_pose = tello_pose
                 
@@ -167,11 +166,9 @@ async def Tello_thread(tello: TelloController):
                 #     print("Waiting for Tello pose data...")
                 #     # await tello.rc(0, 0, 0, 0)
                 
-                await asyncio.sleep(0.1)  # Control loop frequency
-                
-            elif state == State.LANDING:
+                state = State.LANDING
                 print("Tello: Transition to LANDING state")
-                # await tello.rc(0, 0, 0, 0) 
+            elif state == State.LANDING:
                 await asyncio.sleep(0.5)
                 await tello.land()
                 state = State.IDLE_2
