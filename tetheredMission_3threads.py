@@ -7,7 +7,7 @@ import math, time
 import asyncio
 from bleak import BleakClient
 from pyvesc.protocol.interface import encode
-from pyvesc.VESC.messages import SetCurrent, SetPosition, SetDutyCycle
+from pyvesc.VESC.messages import SetCurrent, SetPosition, SetDutyCycle, SetCurrentBrake
 from typing import Union
 import uuid
 from bleak.backends.characteristic import BleakGATTCharacteristic
@@ -102,6 +102,15 @@ class BluetoothVESC:
         self.logger.info(f"Sending duty command: {new_duty} mA (CAN ID: {can_id})")
         await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
 
+    async def set_current_brake(self, new_current, can_id=None):
+        if can_id is not None:
+            buffer = encode(SetCurrentBrake(new_current, can_id=can_id))
+        else:
+            buffer = encode(SetCurrentBrake(new_current))
+        
+        self.logger.info(f"Sending current brake command: {new_current} mA (CAN ID: {can_id})")
+        await self.client.write_gatt_char(self.rx_characteristic, buffer, response=False)
+
 async def VESC_thread(vesc_motor: BluetoothVESC):
     """VESC FSM Control Thread"""
     global state
@@ -110,7 +119,7 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
     while True:
         try:
             if state == State.IDLE:
-                await vesc_motor.set_current(0, can_id=0x77)
+                await vesc_motor.set_duty(0, can_id=0x77)
             elif state == State.TAKEOFF:                
                 elapsed_time = time.time() - last_event_time
                 if elapsed_time < 0.3:
@@ -118,7 +127,7 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
                 elif elapsed_time >= 0.3:
                     await vesc_motor.set_current(-0.05, can_id=0x77)
             elif state == State.ALTITUDE_CONTROL:
-                await vesc_motor.set_current(0, can_id=0x77)
+                await vesc_motor.set_current_brake(0.01, can_id=0x77)
             elif state == State.LANDING:
                 await vesc_motor.set_current(-0.35, can_id=0x77)
             await asyncio.sleep(VESC_DT)
@@ -131,8 +140,6 @@ async def Tello_thread(tello: TelloController):
     global state
     global last_event_time
     mission_complete = False
-    # hover_start_time = None
-    # hover_duration = 5.0  # Hover for 5 seconds
     
     while not mission_complete:
         try:
@@ -146,24 +153,29 @@ async def Tello_thread(tello: TelloController):
             elif state == State.TAKEOFF:
                 await asyncio.sleep(3)
                 state = State.ALTITUDE_CONTROL
+                last_event_time = time.time()
                 print("Tello: Transition to ALTITUDE_CONTROL state")
 
             elif state == State.ALTITUDE_CONTROL:
-                current_pose = tello_pose
-                
-                if current_pose is not None:
-                    position, yaw, velocity = current_pose
+                if time.time() - last_event_time < 5:
+                    await tello.rc(0, 0, 100, 0)
+                    position, yaw, velocity = tello_pose
                     print(f"Tello Pose - Position: {position}, Yaw: {yaw:.3f} rad, Velocity: {velocity}")
-
-                await tello.rc(0 ,0 ,0 ,0)
-
-                state = State.LANDING
-                print("Tello: Transition to LANDING state")
+                    await asyncio.sleep(0.01)
+                elif time.time() - last_event_time < 10:
+                    await tello.rc(0, 100, 50, 0)
+                    position, yaw, velocity = tello_pose
+                    print(f"Tello Pose - Position: {position}, Yaw: {yaw:.3f} rad, Velocity: {velocity}")
+                    await asyncio.sleep(0.01)
+                else:
+                    state = State.LANDING
+                    print("Tello: Transition to LANDING state")
             elif state == State.LANDING:
                 await asyncio.sleep(0.5)
                 await tello.land()
                 state = State.IDLE_2
                 mission_complete = True
+            await asyncio.sleep(tello.tello.TIME_BTW_COMMANDS)
         
         except Exception as e:
             print(f"Tello thread error: {e}")
@@ -181,7 +193,7 @@ async def NatNet_thread(streaming_client: NatNetClient, tello_name: str = "Tello
             if position is not None and yaw is not None and velocity is not None:
                 tello_pose = [position, yaw, velocity]
 
-            await asyncio.sleep(0.01)  # 100 Hz update rate - changed to async sleep
+            await asyncio.sleep(0.01)
     except Exception as e:
         print(f"NatNet thread error: {e}")
     finally:

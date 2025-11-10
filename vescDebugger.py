@@ -61,7 +61,7 @@ class BluetoothVESC:
 async def run_traj(motor: BluetoothVESC):
     print("Executing trajectory...")
     while True:
-        await motor.set_duty_cycle(0, can_id=0x77)
+        await motor.set_current_brake(0.01, can_id=0x77)
         await asyncio.sleep(0.05)
 
 async def main(address):
