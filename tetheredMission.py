@@ -131,6 +131,7 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
                     position, _, _ = tello_pose
                     _, _, target_z, _= WAYPOINTS[0]
                     err_z = target_z - position[2]
+                    err_z = -err_z
                     if err_z > 0:
                         await vesc_motor.set_duty(0.03, can_id=0x77)
                         print(err_z, ' release')
