@@ -147,25 +147,16 @@ async def Tello_thread(tello: TelloController):
                 await asyncio.sleep(3)
                 state = State.ALTITUDE_CONTROL
                 print("Tello: Transition to ALTITUDE_CONTROL state")
-                # state = State.LANDING # for testing
 
-                # hover_start_time = time.time()
             elif state == State.ALTITUDE_CONTROL:
-                # current_pose = tello_pose
+                current_pose = tello_pose
                 
-                # if current_pose is not None:
-                #     position, yaw, velocity = current_pose
-                #     print(f"Tello Pose - Position: {position}, Yaw: {yaw:.3f} rad, Velocity: {velocity}")
-                    
-                #     # await tello.rc(0, 0, 0, 0)
-                    
-                #     if hover_start_time is not None and (time.time() - hover_start_time) >= hover_duration:
-                #         print(f"Hovering complete ({hover_duration} seconds), transitioning to LANDING")
-                #         state = State.LANDING
-                # else:
-                #     print("Waiting for Tello pose data...")
-                #     # await tello.rc(0, 0, 0, 0)
-                
+                if current_pose is not None:
+                    position, yaw, velocity = current_pose
+                    print(f"Tello Pose - Position: {position}, Yaw: {yaw:.3f} rad, Velocity: {velocity}")
+
+                await tello.rc(0 ,0 ,0 ,0)
+
                 state = State.LANDING
                 print("Tello: Transition to LANDING state")
             elif state == State.LANDING:
@@ -182,20 +173,20 @@ async def NatNet_thread(streaming_client: NatNetClient, tello_name: str = "Tello
     """ NatNet Client Thread - Now async """
     global tello_pose
     
-    # try:
-    #     streaming_client.run_async()
-    #     while True:
-    #         position, yaw, velocity = get_pose(tello_name)
+    try:
+        streaming_client.run_async()
+        while True:
+            position, yaw, velocity = get_pose(tello_name)
 
-    #         if position is not None and yaw is not None and velocity is not None:
-    #             tello_pose = [position, yaw, velocity]
+            if position is not None and yaw is not None and velocity is not None:
+                tello_pose = [position, yaw, velocity]
 
-    #         await asyncio.sleep(0.01)  # 100 Hz update rate - changed to async sleep
-    # except Exception as e:
-    #     print(f"NatNet thread error: {e}")
-    # finally:
-    #     streaming_client.stop_async()
-    #     print("NatNet thread stopped")
+            await asyncio.sleep(0.01)  # 100 Hz update rate - changed to async sleep
+    except Exception as e:
+        print(f"NatNet thread error: {e}")
+    finally:
+        streaming_client.stop_async()
+        print("NatNet thread stopped")
 
 async def entry_2(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tello: TelloController):    
     """Main mission entry point"""
