@@ -13,6 +13,7 @@ import uuid
 from bleak.backends.characteristic import BleakGATTCharacteristic
 import logging
 from enum import Enum
+import os
 
 # VESC Bluetooth configuration
 BLE_ADDRESS = "D5:38:71:28:C1:36"
@@ -127,7 +128,15 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
                 elif elapsed_time >= 0.3:
                     await vesc_motor.set_current(-0.05, can_id=0x77)
             elif state == State.ALTITUDE_CONTROL:
-                await vesc_motor.set_current_brake(0.01, can_id=0x77)
+                    position, _, _ = tello_pose
+                    _, _, target_z, _= WAYPOINTS[0]
+                    err_z = target_z - position[2]
+                    if err_z > 0:
+                        await vesc_motor.set_duty(0.03, can_id=0x77)
+                        print(err_z, ' release')
+                    elif err_z <= 0:
+                        await vesc_motor.set_duty(-0.03, can_id=0x77)
+                        print(err_z, ' retract')
             elif state == State.LANDING:
                 await vesc_motor.set_current(-0.35, can_id=0x77)
             await asyncio.sleep(VESC_DT)
@@ -156,16 +165,22 @@ async def Tello_thread(tello: TelloController):
                 last_event_time = time.time()
                 print("Tello: Transition to ALTITUDE_CONTROL state")
             elif state == State.ALTITUDE_CONTROL:
-                if time.time() - last_event_time < 20:
+                if time.time() - last_event_time < 12:
                     position, _, velocity = tello_pose
                     _, _, target_z, _= WAYPOINTS[0]
                     err_z = target_z - position[2]
-                    control_z = z_controller.compute(target_z, position[2], velocity[2])
+                    control_z = int(z_controller.compute(target_z, position[2], velocity[2]))
                     await tello.rc(0, 0, control_z, 0)
                     if err_z <= WAYPOINT_TOLERANCE:
                         state = State.LANDING
+                        last_event_time = time.time()
                         print("Tello: Transition to LANDING state")
-                    await asyncio.sleep(0.01)
+                elif time.time() - last_event_time >= 12:
+                    state = State.LANDING
+                    last_event_time = time.time()
+                    print("Timeout Waypoint")
+                    print("Tello: Transition to LANDING state")
+                await asyncio.sleep(0.01)
             elif state == State.LANDING:
                 await asyncio.sleep(0.5)
                 await tello.land()
