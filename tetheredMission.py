@@ -174,6 +174,7 @@ async def Tello_thread(tello: TelloController):
                     if err_z <= WAYPOINT_TOLERANCE:
                         state = State.LANDING
                         last_event_time = time.time()
+                        print("Achieved Mission")
                         print("Tello: Transition to LANDING state")
                 elif time.time() - last_event_time >= 12:
                     state = State.LANDING
@@ -182,12 +183,13 @@ async def Tello_thread(tello: TelloController):
                     print("Tello: Transition to LANDING state")
                 await asyncio.sleep(0.01)
             elif state == State.LANDING:
-                await asyncio.sleep(0.5)
+                await asyncio.sleep(0.5) # what is this for?
                 await tello.land()
-                state = State.IDLE_2
+                await asyncio.sleep(7) # given landing time
                 mission_complete = True
+                state = State.IDLE_2
+                # mission_complete = True
             await asyncio.sleep(tello.tello.TIME_BTW_COMMANDS)
-        
         except Exception as e:
             print(f"Tello thread error: {e}")
             raise e
@@ -236,13 +238,12 @@ async def entry_2(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tel
         print("Mission complete!")
     except KeyboardInterrupt:
         print("Mission interrupted by user")
-        state = State.IDLE_2  # Emergency landing
-        await asyncio.sleep(7)  # Give time for landing
-        
+        state = State.IDLE_2
+        await asyncio.sleep(7)
     except Exception as e:
         print(f"Mission error: {e}")
-        state = State.IDLE_2  # Emergency landing
-        await asyncio.sleep(7)  # Give time for landing
+        state = State.IDLE_2
+        await asyncio.sleep(7)
     finally:
         vesc_task.cancel()
         natnet_task.cancel()
