@@ -242,17 +242,18 @@ if __name__ == "__main__":
     with streaming_client:
         streaming_client.request_modeldef()
         
-        run_mission(streaming_client)
+        """ Mission mode """
+        # run_mission(streaming_client)
 
-        # while True:
-        #     """ Debug mode """
-        #     streaming_client.update_sync()
-        #     position, yaw, velocity = get_tello_pose()
-        #     if position and yaw is not None and velocity is not None:
-        #         print(f"Pos: [{position[0]:.2f}, {position[1]:.2f}, {position[2]:.2f}]m | "
-        #           f"Vel: [{velocity[0]:.2f}, {velocity[1]:.2f}, {velocity[2]:.2f}] m/s | "
-        #           f"Yaw: {math.degrees(yaw):.1f}° | "
-        #           f"Frames: {num_frames}")
-        #     time.sleep(0.01)
+        """ Debug mode """
+        while True:
+            streaming_client.update_sync()
+            position, yaw, velocity = get_tello_pose()
+            if position and yaw is not None and velocity is not None:
+                print(f"Pos: [{position[0]:.2f}, {position[1]:.2f}, {position[2]:.2f}]m | "
+                  f"Vel: [{velocity[0]:.2f}, {velocity[1]:.2f}, {velocity[2]:.2f}] m/s | "
+                  f"Yaw: {math.degrees(yaw):.1f}° | "
+                  f"Frames: {num_frames}")
+            time.sleep(0.01)
 
     

@@ -1,10 +1,8 @@
 INFO:djitellopy:Tello instance was initialized. Host: '192.168.10.1'. Port: '8889'.
 INFO:djitellopy:Send command: 'command'
-ERROR:djitellopy:'utf-8' codec can't decode byte 0xcc in position 0: invalid continuation byte
-INFO:djitellopy:Send command: 'command'
 INFO:djitellopy:Response command: 'ok'
-WARNING:djitellopy:'.connect()' received first state packet after 0.05 seconds
-INFO:TelloWrapper:Connected to Tello! Battery: 22%
+WARNING:djitellopy:'.connect()' received first state packet after 0.1 seconds
+INFO:TelloWrapper:Connected to Tello! Battery: 74%
 INFO:BluetoothVESC:Sending duty command: 0 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending duty command: 0 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending duty command: 0 mA (CAN ID: 119)
@@ -56,12 +54,151 @@ INFO:BluetoothVESC:Sending duty command: 0 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending duty command: 0 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending duty command: 0 mA (CAN ID: 119)
 INFO:djitellopy:Send command: takeoff
+INFO:BluetoothVESC:Sending duty command: 0.03 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
 INFO:djitellopy:Response takeoff: 'ok'
 INFO:TelloWrapper:Takeoff command sent
-INFO:BluetoothVESC:Sending duty command: 0.03 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.03 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.03 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.03 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
@@ -107,298 +244,587 @@ INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.037739999999999996 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.037686 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 91 5.747999999999999'
-INFO:BluetoothVESC:Sending duty command: 0.037391999999999995 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.037092 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 91 5.232'
-INFO:BluetoothVESC:Sending duty command: 0.036768 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.036581999999999996 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 90 5.0040000000000004'
-INFO:BluetoothVESC:Sending duty command: 0.036306 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 88 5.712000000000001'
-INFO:BluetoothVESC:Sending duty command: 0.036 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.035772000000000005 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 88 5.376'
-INFO:BluetoothVESC:Sending duty command: 0.035586 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.035292000000000004 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 86 5.712000000000001'
-INFO:BluetoothVESC:Sending duty command: 0.035112 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.034818 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 84 6.132'
-INFO:BluetoothVESC:Sending duty command: 0.034614 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.034314 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 84 7.092'
-INFO:BluetoothVESC:Sending duty command: 0.034134 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.033828 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 82 9.012'
-INFO:BluetoothVESC:Sending duty command: 0.03363 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.033401999999999994 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 82 12.828'
-INFO:BluetoothVESC:Sending duty command: 0.033474000000000004 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.033264 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 81 13.836'
-INFO:BluetoothVESC:Sending duty command: 0.033084 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.032898 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 80 15.18'
-INFO:BluetoothVESC:Sending duty command: 0.032735999999999994 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.032514 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 79 16.428'
-INFO:BluetoothVESC:Sending duty command: 0.032322 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.03213 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 79 17.772000000000002'
-INFO:BluetoothVESC:Sending duty command: 0.031883999999999996 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.031698 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 77 19.128'
-INFO:BluetoothVESC:Sending duty command: 0.031416 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.031248 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 76 19.98'
-INFO:BluetoothVESC:Sending duty command: 0.031001999999999995 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.030774 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 75 21.192'
-INFO:BluetoothVESC:Sending duty command: 0.030528 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.030389999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 74 23.580000000000002'
-INFO:BluetoothVESC:Sending duty command: 0.030191999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.029981999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 73 27.708'
-INFO:BluetoothVESC:Sending duty command: 0.029826 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.029609999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 72 33.444'
-INFO:BluetoothVESC:Sending duty command: 0.029442 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.028974 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 66 39.504'
-INFO:BluetoothVESC:Sending duty command: 0.028836 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.028872 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 70 51.251999999999995'
-INFO:BluetoothVESC:Sending duty command: 0.028362 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.028187999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 69 61.99199999999999'
-INFO:BluetoothVESC:Sending duty command: 0.027972 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.028037999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 69 70.62'
-INFO:BluetoothVESC:Sending duty command: 0.027816 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.027696 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 67 81.732'
-INFO:BluetoothVESC:Sending duty command: 0.027516 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.027378 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 67 93.06'
-INFO:BluetoothVESC:Sending duty command: 0.02724 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.027084 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 67 100'
-INFO:BluetoothVESC:Sending duty command: 0.026982 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 66 100'
-INFO:BluetoothVESC:Sending duty command: 0.026861999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.026742 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 65 100'
-INFO:BluetoothVESC:Sending duty command: 0.026615999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.026406 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 65 100'
-INFO:BluetoothVESC:Sending duty command: 0.026232 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.026021999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 63 100'
-INFO:BluetoothVESC:Sending duty command: 0.025872 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.025668 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.025445999999999996 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 62 100'
-INFO:BluetoothVESC:Sending duty command: 0.025224 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 61 100'
-INFO:BluetoothVESC:Sending duty command: 0.025019999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.024791999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 61 100'
-INFO:BluetoothVESC:Sending duty command: 0.024701999999999998 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.024522 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 60 100'
-INFO:BluetoothVESC:Sending duty command: 0.024353999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.024263999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 59 100'
-INFO:BluetoothVESC:Sending duty command: 0.024006 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.02391 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 59 100'
-INFO:BluetoothVESC:Sending duty command: 0.023814 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.023718 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 58 -100'
-INFO:BluetoothVESC:Sending duty command: 0.023621999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.023507999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 58 -100'
-INFO:BluetoothVESC:Sending duty command: 0.023382 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.023274 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 57 -100'
-INFO:BluetoothVESC:Sending duty command: 0.02334 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.023208 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 56 -100'
-INFO:BluetoothVESC:Sending duty command: 0.023027999999999996 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.022841999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 56 -100'
-INFO:BluetoothVESC:Sending duty command: 0.022638000000000002 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 55 -100'
-INFO:BluetoothVESC:Sending duty command: 0.022421999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.022236 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 53 -100'
-INFO:BluetoothVESC:Sending duty command: 0.022062000000000002 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.021876 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 53 -99.78'
-INFO:BluetoothVESC:Sending duty command: 0.021726 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.021618 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 53 -61.739999999999995'
-INFO:BluetoothVESC:Sending duty command: 0.021485999999999998 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.021408 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 53 -20.928'
-INFO:BluetoothVESC:Sending duty command: 0.021414 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.021366 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 53 15.011999999999999'
-INFO:BluetoothVESC:Sending duty command: 0.021348 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.021348 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 53 51.576'
-INFO:BluetoothVESC:Sending duty command: 0.021378 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.021396 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 53 82.32000000000001'
-INFO:BluetoothVESC:Sending duty command: 0.021432 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.021443999999999998 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.021455999999999996 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 1 100'
-INFO:BluetoothVESC:Sending duty command: 0.00045000000000000037 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 1 100'
-INFO:BluetoothVESC:Sending duty command: 0.0004920000000000024 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.0006359999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 2 100'
-INFO:BluetoothVESC:Sending duty command: 0.0007200000000000006 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.0008220000000000027 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 2 100'
-INFO:BluetoothVESC:Sending duty command: 0.0008880000000000021 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.0009360000000000001 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 2 100'
-INFO:BluetoothVESC:Sending duty command: 0.0009120000000000028 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.0008940000000000015 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 2 100'
-INFO:BluetoothVESC:Sending duty command: 0.0008220000000000027 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.000726 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 1 100'
-INFO:BluetoothVESC:Sending duty command: 0.0006180000000000019 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.0005040000000000011 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 0 100'
-INFO:BluetoothVESC:Sending duty command: 0.00034800000000000163 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: 0.00016800000000000148 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 0 100'
-INFO:BluetoothVESC:Sending duty command: 6.00000000000267e-06 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -5 100'
-INFO:BluetoothVESC:Sending duty command: -0.00034199999999999893 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.00034199999999999893 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 100'
-INFO:BluetoothVESC:Sending duty command: -0.0004379999999999984 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0006359999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 0 100'
-INFO:BluetoothVESC:Sending duty command: -0.0005879999999999985 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.000773999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 100'
-INFO:BluetoothVESC:Sending duty command: -0.0008399999999999974 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0007379999999999986 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -5 100'
-INFO:BluetoothVESC:Sending duty command: -0.0009119999999999994 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0007979999999999987 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 100'
-INFO:BluetoothVESC:Sending duty command: -0.000816 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0009479999999999988 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 100'
-INFO:BluetoothVESC:Sending duty command: -0.0008219999999999994 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0009299999999999975 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 0 100'
-INFO:BluetoothVESC:Sending duty command: -0.0007619999999999993 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0007499999999999973 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 100'
-INFO:BluetoothVESC:Sending duty command: -0.0008579999999999987 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 100'
-INFO:BluetoothVESC:Sending duty command: -0.000833999999999998 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.000833999999999998 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 100'
-INFO:BluetoothVESC:Sending duty command: -0.000816 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0007499999999999973 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0007199999999999973 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0007319999999999993 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 -100'
-INFO:BluetoothVESC:Sending duty command: -0.000713999999999998 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.000726 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -5 -100'
-INFO:BluetoothVESC:Sending duty command: -0.000726 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0005399999999999971 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0005519999999999991 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0005579999999999985 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0005639999999999978 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0005819999999999992 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0005879999999999985 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0006119999999999992 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0006239999999999978 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -1 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0006299999999999972 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0006419999999999992 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0006779999999999986 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0007619999999999993 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0008699999999999974 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0009360000000000001 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0009839999999999981 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0010199999999999975 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0010499999999999975 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -100'
-INFO:BluetoothVESC:Sending duty command: -0.0010619999999999996 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0010860000000000002 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -87.528'
-INFO:BluetoothVESC:Sending duty command: -0.001097999999999999 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0011099999999999977 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -71.328'
-INFO:BluetoothVESC:Sending duty command: -0.001097999999999999 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0010860000000000002 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -56.772000000000006'
-INFO:BluetoothVESC:Sending duty command: -0.0010860000000000002 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.001097999999999999 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -43.716'
-INFO:BluetoothVESC:Sending duty command: -0.0011160000000000002 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.001127999999999999 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -34.416'
-INFO:BluetoothVESC:Sending duty command: -0.0011399999999999976 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0011399999999999976 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -27.648'
-INFO:BluetoothVESC:Sending duty command: -0.0011399999999999976 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.001145999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -22.524'
-INFO:BluetoothVESC:Sending duty command: -0.0011639999999999984 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -4 -18.228'
-INFO:BluetoothVESC:Sending duty command: -0.0011639999999999984 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.001145999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -15.527999999999999'
-INFO:BluetoothVESC:Sending duty command: -0.001145999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.001157999999999999 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -14.556000000000001'
-INFO:BluetoothVESC:Sending duty command: -0.0011519999999999996 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0011519999999999996 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -14.927999999999999'
-INFO:BluetoothVESC:Sending duty command: -0.0011519999999999996 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0011519999999999996 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -17.628'
-INFO:BluetoothVESC:Sending duty command: -0.001145999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -20.952'
-INFO:BluetoothVESC:Sending duty command: -0.0011399999999999976 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0011399999999999976 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -23.928'
-INFO:BluetoothVESC:Sending duty command: -0.001145999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.001145999999999997 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -26.772'
-INFO:BluetoothVESC:Sending duty command: -0.001145999999999997 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.001157999999999999 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -27.936'
-INFO:BluetoothVESC:Sending duty command: -0.0011519999999999996 mA (CAN ID: 119)
-INFO:BluetoothVESC:Sending duty command: -0.0011519999999999996 mA (CAN ID: 119)
-INFO:djitellopy:Send command (no response expected): 'rc 0 0 -2 -28.248'
-INFO:BluetoothVESC:Sending duty command: -0.001145999999999997 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.05 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06401353060095967 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 3 99 100'
+INFO:BluetoothVESC:Sending duty command: 0.06395795259387217 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06347541886431314 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 3 90 100'
+INFO:BluetoothVESC:Sending duty command: 0.06261031384684157 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06249380369284623 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 2 90 100'
+INFO:BluetoothVESC:Sending duty command: 0.06097781973799982 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05981932212922511 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 1 86 100'
+INFO:BluetoothVESC:Sending duty command: 0.059285269671310425 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0588827546909959 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 0 83 100'
+INFO:BluetoothVESC:Sending duty command: 0.05756096159724923 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.056938245494570695 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 -1 82 100'
+INFO:BluetoothVESC:Sending duty command: 0.05622431324613935 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05568573336142749 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 0 81 100'
+INFO:BluetoothVESC:Sending duty command: 0.054857824419129134 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05413079068330704 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -3 77 100'
+INFO:BluetoothVESC:Sending duty command: 0.05354548160209225 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05303789211497757 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 2 0 76 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05227235406981399 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0515270152444327 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 -2 74 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05104086793932877 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05083441354043538 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -2 69 -100'
+INFO:BluetoothVESC:Sending duty command: 0.04979167601115673 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0492130633064027 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 -3 72 -100'
+INFO:BluetoothVESC:Sending duty command: 0.04893212237375363 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 -5 70 -100'
+INFO:BluetoothVESC:Sending duty command: 0.04850881466290431 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04797807207464677 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 3 -5 69 -55.416'
+INFO:BluetoothVESC:Sending duty command: 0.04745070916224541 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.046845414930385666 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 4 -5 69 -16.092'
+INFO:BluetoothVESC:Sending duty command: 0.04630777580493367 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04578367722234639 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 9 -3 65 23.112'
+INFO:BluetoothVESC:Sending duty command: 0.04524647831599715 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.044726789511432635 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 12 -1 64 56.208'
+INFO:BluetoothVESC:Sending duty command: 0.044140052106901737 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04397940995511423 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 13 1 62 83.244'
+INFO:BluetoothVESC:Sending duty command: 0.04355155565533797 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.043154537420762605 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 13 2 62 100'
+INFO:BluetoothVESC:Sending duty command: 0.04279518314016193 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 12 6 59 100'
+INFO:BluetoothVESC:Sending duty command: 0.04222171716072192 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.041506169420942714 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 10 6 56 100'
+INFO:BluetoothVESC:Sending duty command: 0.0410243573989892 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04043027207427623 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 8 5 57 100'
+INFO:BluetoothVESC:Sending duty command: 0.03964972887675275 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03886349701197771 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 4 5 53 100'
+INFO:BluetoothVESC:Sending duty command: 0.03837537361381646 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03778831830076592 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 3 4 54 100'
+INFO:BluetoothVESC:Sending duty command: 0.03718961414158528 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03665919257157746 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 2 52 100'
+INFO:BluetoothVESC:Sending duty command: 0.03638308535569792 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.036367130763919224 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 1 55 100'
+INFO:BluetoothVESC:Sending duty command: 0.03661558274833271 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.037345228610894864 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 0 56 83.556'
+INFO:BluetoothVESC:Sending duty command: 0.038064868317124134 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.039608259239709086 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 0 69 35.328'
+INFO:BluetoothVESC:Sending duty command: 0.041713528980415936 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04337476339993107 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 -2 68 -12.792'
+INFO:BluetoothVESC:Sending duty command: 0.04503814605420609 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -5 79 -58.74'
+INFO:BluetoothVESC:Sending duty command: 0.047691593598872324 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04995929843382511 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -6 88 -96.0'
+INFO:BluetoothVESC:Sending duty command: 0.05186523112837732 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05388195059572362 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 -8 85 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05561572978933208 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.056649390111456636 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 -13 85 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05748634359567496 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05841524287375686 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 3 -11 91 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05937174664771116 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.059689349971330734 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 5 -13 95 -100'
+INFO:BluetoothVESC:Sending duty command: 0.06038637594689718 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06060255440160918 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 5 -18 88 -100'
+INFO:BluetoothVESC:Sending duty command: 0.06013737190799079 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 5 -18 87 -100'
+INFO:BluetoothVESC:Sending duty command: 0.06025146803190774 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05981825891815976 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 9 -21 83 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05944578874907794 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05866713049059074 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 11 -24 81 -100'
+INFO:BluetoothVESC:Sending duty command: 0.0584379713884731 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05795175320902725 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 12 -24 81 -100'
+INFO:BluetoothVESC:Sending duty command: 0.057547416101854654 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.057263553854087684 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 17 -27 74 -100'
+INFO:BluetoothVESC:Sending duty command: 0.056827684274480164 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05705852872270718 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 18 -26 79 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05748291398320026 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 18 -26 84 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05808198429805925 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0584784310665052 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 21 -24 84 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05854530211724934 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.058466717027724414 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 21 -21 80 -100'
+INFO:BluetoothVESC:Sending duty command: 0.057834451670263125 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.057390321483678765 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 19 -20 76 -100'
+INFO:BluetoothVESC:Sending duty command: 0.0566373348596136 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 19 -15 75 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05564065689763197 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05455555792034392 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 17 -11 73 -100'
+INFO:BluetoothVESC:Sending duty command: 0.053665736741425635 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.052630719166661594 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 16 -10 73 -100'
+INFO:BluetoothVESC:Sending duty command: 0.05141244693651528 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05026309282167185 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 10 -4 69 -93.816'
+INFO:BluetoothVESC:Sending duty command: 0.04933902714890111 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04835838913777009 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 8 -5 69 -80.928'
+INFO:BluetoothVESC:Sending duty command: 0.047562511498027524 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0471050942043427 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -2 68 -66.708'
+INFO:BluetoothVESC:Sending duty command: 0.046662848177109806 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.046467509078925245 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -2 69 -55.896'
+INFO:BluetoothVESC:Sending duty command: 0.04651820933784963 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.046691649146287394 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -4 70 -49.44'
+INFO:BluetoothVESC:Sending duty command: 0.047012949279959027 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04749061591514686 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -11 -7 72 -43.391999999999996'
+INFO:BluetoothVESC:Sending duty command: 0.047859753446920304 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -11 -8 66 -40.152'
+INFO:BluetoothVESC:Sending duty command: 0.047385928291002175 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04590298574167045 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -12 -12 59 -38.928000000000004'
+INFO:BluetoothVESC:Sending duty command: 0.04439933895904308 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.042055155450907565 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -13 -16 46 -40.704'
+INFO:BluetoothVESC:Sending duty command: 0.03988285095125473 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03859792999630939 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -11 -12 52 -42.516'
+INFO:BluetoothVESC:Sending duty command: 0.03801393823323229 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03758079961895436 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -9 51 -43.199999999999996'
+INFO:BluetoothVESC:Sending duty command: 0.036772848679426505 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03606218656709546 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -7 -7 51 -42.18'
+INFO:BluetoothVESC:Sending duty command: 0.03503899256542631 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03403497318935333 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 0 48 -40.007999999999996'
+INFO:BluetoothVESC:Sending duty command: 0.03301553119366702 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 5 46 -36.168'
+INFO:BluetoothVESC:Sending duty command: 0.03228234347131571 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03171360275969919 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 2 7 46 -31.668000000000003'
+INFO:BluetoothVESC:Sending duty command: 0.03159030389217553 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03169872079437907 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 6 16 46 -24.864'
+INFO:BluetoothVESC:Sending duty command: 0.032122797200742036 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03278828296815801 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 6 20 45 -17.664'
+INFO:BluetoothVESC:Sending duty command: 0.033226236621080034 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03290371711524398 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 6 28 34 -9.144'
+INFO:BluetoothVESC:Sending duty command: 0.031697320075993816 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.030337016992446703 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 5 29 28 -7.284'
+INFO:BluetoothVESC:Sending duty command: 0.028692568724323034 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.027239386924084775 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 4 33 14 -8.568000000000001'
+INFO:BluetoothVESC:Sending duty command: 0.026136998680032105 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0252722397107973 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 3 29 17 -12.072'
+INFO:BluetoothVESC:Sending duty command: 0.024471178966286034 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.023200073275746344 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 3 26 18 -12.204'
+INFO:BluetoothVESC:Sending duty command: 0.021826932904098095 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 16 14 -12.0'
+INFO:BluetoothVESC:Sending duty command: 0.01977711303502106 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.017255587500864762 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 9 9 -12.767999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.01482080632084503 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011773771698143295 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -1 6 7 -13.068'
+INFO:BluetoothVESC:Sending duty command: 0.008736211993764807 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.006731077179768486 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -5 2 -13.644'
+INFO:BluetoothVESC:Sending duty command: 0.004630053995365493 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.004213798761212975 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -7 -12 -14.292'
+INFO:BluetoothVESC:Sending duty command: 0.03971433242546071 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -11 -1 -15.48'
+INFO:BluetoothVESC:Sending duty command: 0.03864425442417023 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03758677160917123 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -7 -23 -6 -14.772'
+INFO:BluetoothVESC:Sending duty command: 0.03689738337606069 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.036197305148311806 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -26 -6 -16.152'
+INFO:BluetoothVESC:Sending duty command: 0.035788910293553224 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03540311568209781 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -29 -8 -16.152'
+INFO:BluetoothVESC:Sending duty command: 0.03512876456694713 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03465712769402566 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -31 -8 -15.036'
+INFO:BluetoothVESC:Sending duty command: 0.03440465811485415 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03440364515570988 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -31 -10 -14.964'
+INFO:BluetoothVESC:Sending duty command: 0.034624125981748625 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03529992209623132 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -8 -29 -15 -16.067999999999998'
+INFO:BluetoothVESC:Sending duty command: 0.036128722645562765 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03677424778292548 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -30 -12 -16.272'
+INFO:BluetoothVESC:Sending duty command: 0.03677424778292548 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03677424778292548 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -30 -12 -16.272'
+INFO:BluetoothVESC:Sending duty command: 0.03677424778292548 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03677424778292548 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -30 -12 -16.272'
+INFO:BluetoothVESC:Sending duty command: 0.03677424778292548 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03677424778292548 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -9 -30 -12 -16.272'
+INFO:BluetoothVESC:Sending duty command: 0.03677424778292548 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04642923540184568 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -10 -22 -14.544'
+INFO:BluetoothVESC:Sending duty command: 0.048348440512595646 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04982258925427301 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 2 2 -27 -14.352'
+INFO:BluetoothVESC:Sending duty command: 0.05169966440896885 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05401095166723135 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 3 8 -26 -14.076'
+INFO:BluetoothVESC:Sending duty command: 0.05615007390912322 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 2 5 -26 -13.452'
+INFO:BluetoothVESC:Sending duty command: 0.057653645157960315 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05987606700510648 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 6 19 -25 -12.624'
+INFO:BluetoothVESC:Sending duty command: 0.06093242650674599 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0621431476512093 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 7 22 -24 -11.34'
+INFO:BluetoothVESC:Sending duty command: 0.06301521800327282 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06393074221374252 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 7 25 -22 -7.4879999999999995'
+INFO:BluetoothVESC:Sending duty command: 0.06453222915722034 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06482892332902036 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 6 25 -20 -5.8919999999999995'
+INFO:BluetoothVESC:Sending duty command: 0.06488637915618348 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06470532667408456 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 5 23 -20 -4.62'
+INFO:BluetoothVESC:Sending duty command: 0.0641363126473607 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06338737808112906 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 4 20 -16 -3.624'
+INFO:BluetoothVESC:Sending duty command: 0.06230819849746902 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.06137154552396412 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 3 18 -15 -2.064'
+INFO:BluetoothVESC:Sending duty command: 0.059917567540747174 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0586086367355529 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 2 11 -12 -0.192'
+INFO:BluetoothVESC:Sending duty command: 0.05699861050937997 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.05578077356939396 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 2 9 -11 0.648'
+INFO:BluetoothVESC:Sending duty command: 0.054061521436230414 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0523763057116479 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 1 53 -41 0.144'
+INFO:BluetoothVESC:Sending duty command: 0.050513781287882226 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 46 -46 -1.092'
+INFO:BluetoothVESC:Sending duty command: 0.0486848087189423 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04692133416687979 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 45 -45 -0.204'
+INFO:BluetoothVESC:Sending duty command: 0.04523506272793264 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.04257960309819715 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 31 -39 -1.296'
+INFO:BluetoothVESC:Sending duty command: 0.03947157458222309 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.036456205233128695 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 24 -36 -1.488'
+INFO:BluetoothVESC:Sending duty command: 0.03374838218344696 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.03037117712568942 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -1 -3 -25 -1.5'
+INFO:BluetoothVESC:Sending duty command: 0.025780554687593518 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.022531160644760406 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -10 -22 -1.776'
+INFO:BluetoothVESC:Sending duty command: 0.02017301415257522 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.017784720970540974 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -22 -15 -1.104'
+INFO:BluetoothVESC:Sending duty command: 0.015971008108444505 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.015085135067343615 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -26 -11 -1.14'
+INFO:BluetoothVESC:Sending duty command: 0.015010919358920028 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.016321798307784595 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -30 6 -1.548'
+INFO:BluetoothVESC:Sending duty command: 0.01770162704386238 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.018892850499593754 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -36 9 -2.292'
+INFO:BluetoothVESC:Sending duty command: 0.02040436717960153 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.021569907278428436 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -35 9 -2.904'
+INFO:BluetoothVESC:Sending duty command: 0.022555223341833706 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.02299608879788039 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -1 -35 4 -2.484'
+INFO:BluetoothVESC:Sending duty command: 0.023541529262135884 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.023259279868474005 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -33 6 -2.772'
+INFO:BluetoothVESC:Sending duty command: 0.02309382168459781 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0228202760719497 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -28 4 -1.7040000000000002'
+INFO:BluetoothVESC:Sending duty command: 0.022065642977262184 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc 0 -30 8 1.272'
+INFO:BluetoothVESC:Sending duty command: 0.02148892970810785 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.020874414961861806 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.020410031847108913 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -24 1 -1.26'
+INFO:BluetoothVESC:Sending duty command: 0.019583886233329687 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -26 0 0.024'
+INFO:BluetoothVESC:Sending duty command: 0.01882640964177716 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.017638823656922247 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -21 -6 0.624'
+INFO:BluetoothVESC:Sending duty command: 0.016957458535995305 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.01545753861389322 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -14 -8 -0.156'
+INFO:BluetoothVESC:Sending duty command: 0.014471447750657153 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.012945717438597217 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -6 -12 -14 -0.228'
+INFO:BluetoothVESC:Sending duty command: 0.012251595814423526 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.010935195471503933 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -6 0 -9 -0.5399999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.010114756546748913 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009852659539434011 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -1 -11 1.392'
+INFO:BluetoothVESC:Sending duty command: 0.009245717927776077 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009058371818378841 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -6 5 -11 -0.6120000000000001'
+INFO:BluetoothVESC:Sending duty command: 0.009345218028489225 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009400143615924174 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -7 7 -12 -0.768'
+INFO:BluetoothVESC:Sending duty command: 0.009870263421003516 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.010317092613716333 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -7 5 -13 -1.8719999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.010571778469112945 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -7 10 -12 -0.72'
+INFO:BluetoothVESC:Sending duty command: 0.010939931444026508 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011060926724284905 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -6 12 -11 -0.768'
+INFO:BluetoothVESC:Sending duty command: 0.011206292874987695 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011183277694844205 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 10 -10 -0.768'
+INFO:BluetoothVESC:Sending duty command: 0.01098553139361042 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.010728546033829561 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 9 -11 -0.8520000000000001'
+INFO:BluetoothVESC:Sending duty command: 0.010377119060702732 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009867593424944102 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 6 -12 -1.9680000000000002'
+INFO:BluetoothVESC:Sending duty command: 0.009449253938803852 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 1 -10 1.368'
+INFO:BluetoothVESC:Sending duty command: 0.008823661371562262 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.00838589887847451 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -1 0 -9 1.4640000000000002'
+INFO:BluetoothVESC:Sending duty command: 0.007973713062306667 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.007567786994888269 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -1 -10 -1.848'
+INFO:BluetoothVESC:Sending duty command: 0.007329481564203569 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.007360176628315381 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -5 -10 -1.14'
+INFO:BluetoothVESC:Sending duty command: 0.007486821755591618 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.007726163342824175 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -10 -12 -1.176'
+INFO:BluetoothVESC:Sending duty command: 0.008423271336007175 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -7 -9 -1.248'
+INFO:BluetoothVESC:Sending duty command: 0.009022372193608507 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009689267258157346 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -1 -17 -13 0.588'
+INFO:BluetoothVESC:Sending duty command: 0.010678014796768168 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011645170672858344 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -14 -11 -0.828'
+INFO:BluetoothVESC:Sending duty command: 0.01232695420612894 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.013019239609132323 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -18 -11 -0.7799999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.014142156836918477 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.014759366517571142 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -20 -9 0.708'
+INFO:BluetoothVESC:Sending duty command: 0.015019950066494895 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.015092080704793493 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -20 -9 0.636'
+INFO:BluetoothVESC:Sending duty command: 0.015035524600092942 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.015102797754058685 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -1 -21 -10 0.5399999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.015212800531131668 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.015036296086470237 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -20 -8 -0.49200000000000005'
+INFO:BluetoothVESC:Sending duty command: 0.015052524705178198 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.014887988447066984 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -18 -9 0.168'
+INFO:BluetoothVESC:Sending duty command: 0.014448733508512088 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.014403839765840221 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -16 -13 0.108'
+INFO:BluetoothVESC:Sending duty command: 0.014075663394668118 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.013741735698229686 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -16 -11 0.324'
+INFO:BluetoothVESC:Sending duty command: 0.013459041570631986 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -12 -12 -0.828'
+INFO:BluetoothVESC:Sending duty command: 0.012868356538424015 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.012459574631583535 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -9 -12 2.1'
+INFO:BluetoothVESC:Sending duty command: 0.012038808080536876 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011683531144307362 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -7 -8 -0.636'
+INFO:BluetoothVESC:Sending duty command: 0.01137106415424695 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011073585688475076 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -8 -12 0.192'
+INFO:BluetoothVESC:Sending duty command: 0.010955669765012088 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.010607775450112053 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -6 -7 -13 -1.4040000000000001'
+INFO:BluetoothVESC:Sending duty command: 0.010182244349847436 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009939069372934269 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -6 -2 -10 -1.368'
+INFO:BluetoothVESC:Sending duty command: 0.00981633842122408 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009823838353718979 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -1 -10 0.264'
+INFO:BluetoothVESC:Sending duty command: 0.009355410199451443 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009313377475438221 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -7 -2 -12 -0.5399999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.009156096329768486 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.00922244002420184 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -2 -11 -1.032'
+INFO:BluetoothVESC:Sending duty command: 0.008951122834594552 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.00875781936328901 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 0 -9 0.996'
+INFO:BluetoothVESC:Sending duty command: 0.0087886517737364 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.008546894172739008 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -2 -10 -0.6120000000000001'
+INFO:BluetoothVESC:Sending duty command: 0.008327094331157775 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.008340503581918781 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -2 -9 2.4'
+INFO:BluetoothVESC:Sending duty command: 0.00815339806461085 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.00807188329945373 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -6 -11 -0.684'
+INFO:BluetoothVESC:Sending duty command: 0.008170746599913624 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -3 -10 0.6'
+INFO:BluetoothVESC:Sending duty command: 0.00804247474351023 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.008172227358560206 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -6 -8 0.588'
+INFO:BluetoothVESC:Sending duty command: 0.008197249538717236 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.008268960031346138 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -6 -7 -1.02'
+INFO:BluetoothVESC:Sending duty command: 0.008415972908701648 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.008597540345936159 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -9 -8 -1.212'
+INFO:BluetoothVESC:Sending duty command: 0.008894728776078558 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009135195673875846 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -7 -6 2.6999999999999997'
+INFO:BluetoothVESC:Sending duty command: 0.009476254534361137 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009948964770266305 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -11 -5 3.312'
+INFO:BluetoothVESC:Sending duty command: 0.010188316838418402 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.010584710671529947 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -14 -7 3.168'
+INFO:BluetoothVESC:Sending duty command: 0.011137189950791 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011231981125340268 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -16 -6 0.49200000000000005'
+INFO:BluetoothVESC:Sending duty command: 0.011562158103053253 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011828622066834328 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -16 -7 -0.49200000000000005'
+INFO:BluetoothVESC:Sending duty command: 0.012068371886878527 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -15 -6 -0.48'
+INFO:BluetoothVESC:Sending duty command: 0.01225209777956412 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.012147221904616708 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -5 -15 -9 -0.996'
+INFO:BluetoothVESC:Sending duty command: 0.012259241412093981 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.012234998978340782 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -15 -10 0.576'
+INFO:BluetoothVESC:Sending duty command: 0.012249820406846787 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011946593656770955 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -14 -9 0.312'
+INFO:BluetoothVESC:Sending duty command: 0.011549692636602932 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011313483106453113 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -12 -9 0.264'
+INFO:BluetoothVESC:Sending duty command: 0.011038713693180014 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.011058657242179089 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -12 -9 -0.324'
+INFO:BluetoothVESC:Sending duty command: 0.01047337576906319 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.010037021470535966 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -9 -11 0.516'
+INFO:BluetoothVESC:Sending duty command: 0.009831398679740332 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.009189151212163174 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -6 -9 -0.096'
+INFO:BluetoothVESC:Sending duty command: 0.00876405157447171 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -4 -10 0.648'
+INFO:BluetoothVESC:Sending duty command: 0.008495351670178227 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.00775111604867325 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -1 -6 -0.312'
+INFO:BluetoothVESC:Sending duty command: 0.007406301371129859 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0069385445159629855 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -2 -6 0.8999999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.0057460682209664014 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.006230208664242314 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -1 -6 0.324'
+INFO:BluetoothVESC:Sending duty command: 0.005978737324887254 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0053932643176465974 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 0 -5 -0.012'
+INFO:BluetoothVESC:Sending duty command: 0.005288345677052515 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.004756690025637576 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 0 -3 1.512'
+INFO:BluetoothVESC:Sending duty command: 0.004575434405605658 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.004112055447096986 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 1 -5 1.7040000000000002'
+INFO:BluetoothVESC:Sending duty command: 0.004178001914791329 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.004000424977424271 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -3 -9 0.432'
+INFO:BluetoothVESC:Sending duty command: 0.0038914393224101515 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.003911598138868557 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 1 -4 -0.024'
+INFO:BluetoothVESC:Sending duty command: 0.0037708089317810877 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.003778928419539067 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 2 -5 -0.48'
+INFO:BluetoothVESC:Sending duty command: 0.003846907849169247 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 0 -4 -0.084'
+INFO:BluetoothVESC:Sending duty command: 0.0036791711023000835 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0034974705145290304 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -6 -8 -0.096'
+INFO:BluetoothVESC:Sending duty command: 0.0035723521662904415 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.003446766600743367 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 0 -3 -0.168'
+INFO:BluetoothVESC:Sending duty command: 0.003332941643653542 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0032125690654054417 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -4 -5 0.912'
+INFO:BluetoothVESC:Sending duty command: 0.0033486713783230544 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0031117519181322936 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 0 -3 -0.252'
+INFO:BluetoothVESC:Sending duty command: 0.003095835912964383 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.003330855745900741 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 2 0 -0.444'
+INFO:BluetoothVESC:Sending duty command: 0.003199843746185118 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0035101139582640337 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -1 -5 -0.48'
+INFO:BluetoothVESC:Sending duty command: 0.003442760520280199 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.003706345909382989 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 1 -3 -0.5399999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.0039467074885276236 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.004378915390824537 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -2 -3 -8 0.5399999999999999'
+INFO:BluetoothVESC:Sending duty command: 0.0045475048103328026 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0047674416619398734 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -4 -5 -1.4280000000000002'
+INFO:BluetoothVESC:Sending duty command: 0.004929442159108873 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.005477243832439812 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -4 -4 -5 -1.512'
+INFO:BluetoothVESC:Sending duty command: 0.005835486269369504 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending duty command: 0.0057018593458625436 mA (CAN ID: 119)
+INFO:djitellopy:Send command (no response expected): 'rc -3 -7 -5 3.1199999999999997'
+INFO:BluetoothVESC:Sending duty command: 0.0064160501868361355 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
@@ -466,8 +892,123 @@ INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:djitellopy:Send command: land
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:djitellopy:Response land: 'ok'
 INFO:TelloWrapper:Landing command sent
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
+INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)
 INFO:BluetoothVESC:Sending current command: -0.35 mA (CAN ID: 119)

@@ -21,8 +21,8 @@ VESC_TX_CHARACTERISTIC = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 
 # Waypoints: [x, y, z, yaw] in meters and radians
 WAYPOINTS = [
-    [0.0, 0.0, 0.75, 0.0],
-    [0, 0.0, 0.4, 0]
+    [-0.35, -0.3, 0.75, 0.0],
+    [0, -0.3, 0.5, 0]
 ]
 
 # Control parameters
@@ -131,10 +131,16 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
             elif state == State.ALTITUDE_CONTROL:
                 if not waypoint_1:
                     position, _, _ = tello_pose
-                    _, _, target_z, _= WAYPOINTS[0]
+                    target_x, target_y, target_z, _= WAYPOINTS[0]
+
+                    err_x = target_x - position[0]
+                    err_y = target_y - position[1]
                     err_z = target_z - position[2]
-                    duty = err_z * 0.06
-                    if err_z > 0:
+                    
+                    pos_error = math.sqrt(err_x**2 + err_y**2 + err_z**2)
+
+                    duty = pos_error * 0.1
+                    if pos_error > 0:
                         await vesc_motor.set_duty(duty, can_id=0x77)
                         print(f"targetz: {target_z}, errz: {err_z}, duty: {duty}, release")
                     else:
@@ -142,10 +148,15 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
                         print(f"targetz: {target_z}, errz: {err_z}, duty: {duty}, retract")
                 else:
                     position, _, _ = tello_pose
-                    _, _, target_z, _= WAYPOINTS[1]
+                    target_x, target_y, target_z, _= WAYPOINTS[1]
+                    err_x = target_x - position[0]
+                    err_y = target_y - position[1]
                     err_z = target_z - position[2]
-                    duty = err_z * 0.06
-                    if err_z > 0:
+
+                    pos_error = math.sqrt(err_x**2 + err_y**2 + err_z**2)
+
+                    duty = pos_error * 0.1
+                    if pos_error > 0:
                         await vesc_motor.set_duty(duty, can_id=0x77)
                         print(f"targetz: {target_z}, errz: {err_z}, duty: {duty}, release")
                     else:
@@ -181,26 +192,44 @@ async def Tello_thread(tello: TelloController):
                 last_event_time = time.time()
                 print("Tello: Transition to ALTITUDE_CONTROL state")
             elif state == State.ALTITUDE_CONTROL:
-                if time.time() - last_event_time < 6:
+                if time.time() - last_event_time < 12:
                     position, yaw, velocity = tello_pose
-                    _, _, target_z, target_yaw= WAYPOINTS[0]
+                    target_x, target_y, target_z, target_yaw= WAYPOINTS[0]
+                    
+                    err_x = target_x - position[0]
+                    err_y = target_y - position[1]
                     err_z = target_z - position[2]
+                    
+                    control_x = int(x_controller.compute(target_x, position[0], velocity[0]))
+                    control_y = int(y_controller.compute(target_y, position[1], velocity[1]))
                     control_z = int(z_controller.compute(target_z, position[2], velocity[2]))
                     control_yaw = yaw_controller.compute(target_yaw, yaw, 0)
                     control_yaw = -control_yaw  # Invert yaw control for Tello
-                    await tello.rc(0, 0, control_z, control_yaw)
-                    if err_z <= WAYPOINT_TOLERANCE:
+                    
+                    await tello.rc(control_y, control_x, control_z, control_yaw)
+                    
+                    pos_error = math.sqrt(err_x**2 + err_y**2 + err_z**2)
+                    if pos_error <= WAYPOINT_TOLERANCE:
                         waypoint_1 = True
-                elif time.time() - last_event_time < 12:
+                elif time.time() - last_event_time < 24:
                     waypoint_1 = True # stupid hard-code sol; ideally have independent waypoint controller
                     position, yaw, velocity = tello_pose
-                    _, _, target_z, target_yaw= WAYPOINTS[1]
+                    target_x, target_y, target_z, target_yaw= WAYPOINTS[1]
+
+                    err_x = target_x - position[0]
+                    err_y = target_y - position[1]
                     err_z = target_z - position[2]
+                    
+                    control_x = int(x_controller.compute(target_x, position[0], velocity[0]))
+                    control_y = int(y_controller.compute(target_y, position[1], velocity[1]))
                     control_z = int(z_controller.compute(target_z, position[2], velocity[2]))
                     control_yaw = yaw_controller.compute(target_yaw, yaw, 0)
                     control_yaw = -control_yaw  # Invert yaw control for Tello
-                    await tello.rc(0, 0, control_z, control_yaw)
-                    if err_z <= WAYPOINT_TOLERANCE:
+                    
+                    await tello.rc(control_y, control_x, control_z, control_yaw)
+
+                    pos_error = math.sqrt(err_x**2 + err_y**2 + err_z**2)
+                    if pos_error <= WAYPOINT_TOLERANCE:
                         waypoint_2 = True
                 else: # when time diff > 12
                     state = State.LANDING
