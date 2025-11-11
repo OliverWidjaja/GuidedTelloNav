@@ -13,7 +13,6 @@ import uuid
 from bleak.backends.characteristic import BleakGATTCharacteristic
 import logging
 from enum import Enum
-import os
 
 # VESC Bluetooth configuration
 BLE_ADDRESS = "D5:38:71:28:C1:36"
@@ -22,14 +21,14 @@ VESC_TX_CHARACTERISTIC = "6e400003-b5a3-f393-e0a9-e50e24dcca9e"
 
 # Waypoints: [x, y, z, yaw] in meters and radians
 WAYPOINTS = [
-    [0.0, 0.0, 1.0, 0.0],
-    [0, 0.0, 0.5, 0]
+    [0.0, 0.0, 0.75, 0.0],
+    [0, 0.0, 0.4, 0]
 ]
 
 # Control parameters
 WAYPOINT_TOLERANCE = 0.05  # meters for position
 YAW_TOLERANCE = 0.12      # radians for yaw
-KP = [150, 150, 150, 60]  # [Kp_x, Kp_y, Kp_z, Kp_yaw]
+KP = [150, 150, 150, 120]  # [Kp_x, Kp_y, Kp_z, Kp_yaw]
 TIMEOUT = 1.5
 IDLE_TAKEOFF_TIME = 3
 VESC_DT = 0.05
@@ -45,7 +44,7 @@ class State(Enum):
 id_name = {}  # mapping from ID to name
 rigid_bodies = {}
 num_frames = 0
-tello_pose = [0, 0, 0]  # [position, yaw, velocity]
+tello_pose = [[0,0,0], 0, [0,0,0]]  # [position, yaw, velocity]
 
 # Velocity variables
 prev_position = None
@@ -127,31 +126,31 @@ async def VESC_thread(vesc_motor: BluetoothVESC):
                 elapsed_time = time.time() - last_event_time
                 if elapsed_time < 0.3:
                     await vesc_motor.set_duty(0.03, can_id=0x77)
-                elif elapsed_time >= 0.3:
+                else:
                     await vesc_motor.set_current(-0.05, can_id=0x77)
             elif state == State.ALTITUDE_CONTROL:
-                if waypoint_1 is False:
+                if not waypoint_1:
                     position, _, _ = tello_pose
                     _, _, target_z, _= WAYPOINTS[0]
                     err_z = target_z - position[2]
-                    duty = err_z * 0.03
+                    duty = err_z * 0.06
                     if err_z > 0:
                         await vesc_motor.set_duty(duty, can_id=0x77)
-                        print(err_z, duty, ' release')
-                    elif err_z <= 0:
+                        print(f"targetz: {target_z}, errz: {err_z}, duty: {duty}, release")
+                    else:
                         await vesc_motor.set_duty(duty, can_id=0x77)
-                        print(err_z, duty, ' retract')
-                elif waypoint_1 is True:
+                        print(f"targetz: {target_z}, errz: {err_z}, duty: {duty}, retract")
+                else:
                     position, _, _ = tello_pose
                     _, _, target_z, _= WAYPOINTS[1]
                     err_z = target_z - position[2]
-                    duty = err_z * 0.03
+                    duty = err_z * 0.06
                     if err_z > 0:
                         await vesc_motor.set_duty(duty, can_id=0x77)
-                        print(err_z, duty, ' release')
-                    elif err_z <= 0:
+                        print(f"targetz: {target_z}, errz: {err_z}, duty: {duty}, release")
+                    else:
                         await vesc_motor.set_duty(duty, can_id=0x77)
-                        print(err_z, duty, ' retract')
+                        print(f"targetz: {target_z}, errz: {err_z}, duty: {duty}, retract")
             elif state == State.LANDING:
                 await vesc_motor.set_current(-0.35, can_id=0x77)
             await asyncio.sleep(VESC_DT)
@@ -182,24 +181,28 @@ async def Tello_thread(tello: TelloController):
                 last_event_time = time.time()
                 print("Tello: Transition to ALTITUDE_CONTROL state")
             elif state == State.ALTITUDE_CONTROL:
-                if time.time() - last_event_time < 5:
-                    position, _, velocity = tello_pose
-                    _, _, target_z, _= WAYPOINTS[0]
+                if time.time() - last_event_time < 6:
+                    position, yaw, velocity = tello_pose
+                    _, _, target_z, target_yaw= WAYPOINTS[0]
                     err_z = target_z - position[2]
                     control_z = int(z_controller.compute(target_z, position[2], velocity[2]))
-                    await tello.rc(0, 0, control_z, 0)
+                    control_yaw = yaw_controller.compute(target_yaw, yaw, 0)
+                    control_yaw = -control_yaw  # Invert yaw control for Tello
+                    await tello.rc(0, 0, control_z, control_yaw)
                     if err_z <= WAYPOINT_TOLERANCE:
                         waypoint_1 = True
-                elif time.time() - last_event_time < 10:
+                elif time.time() - last_event_time < 12:
                     waypoint_1 = True # stupid hard-code sol; ideally have independent waypoint controller
-                    position, _, velocity = tello_pose
-                    _, _, target_z, _= WAYPOINTS[1]
+                    position, yaw, velocity = tello_pose
+                    _, _, target_z, target_yaw= WAYPOINTS[1]
                     err_z = target_z - position[2]
                     control_z = int(z_controller.compute(target_z, position[2], velocity[2]))
-                    await tello.rc(0, 0, control_z, 0)
+                    control_yaw = yaw_controller.compute(target_yaw, yaw, 0)
+                    control_yaw = -control_yaw  # Invert yaw control for Tello
+                    await tello.rc(0, 0, control_z, control_yaw)
                     if err_z <= WAYPOINT_TOLERANCE:
                         waypoint_2 = True
-                elif time.time() - last_event_time >= 15:
+                else: # when time diff > 12
                     state = State.LANDING
                     last_event_time = time.time()
                     print("Timeout Waypoint")
@@ -207,7 +210,7 @@ async def Tello_thread(tello: TelloController):
 
                 await asyncio.sleep(0.01) # control loop freq -me
             elif state == State.LANDING:
-                await asyncio.sleep(7) # to give heads-start for vesc to start reeling in 
+                await asyncio.sleep(4) # to give heads-start for vesc to start reeling in 
                 await tello.land()
                 await asyncio.sleep(7) # to give settling time for vesc to continuously pull tello if not on dock yet
                 mission_complete = True
@@ -261,10 +264,12 @@ async def entry_2(streaming_client: NatNetClient, vesc_motor: BluetoothVESC, tel
         print("Mission complete!")
     except KeyboardInterrupt:
         print("Mission interrupted by user")
+        tello.emergency_stop()
         state = State.IDLE_2
         await asyncio.sleep(7)
     except Exception as e:
         print(f"Mission error: {e}")
+        tello.emergency_stop()
         state = State.IDLE_2
         await asyncio.sleep(7)
     finally:
